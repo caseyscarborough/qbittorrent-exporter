@@ -2,6 +2,8 @@ package qbittorrent.api;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qbittorrent.api.model.Preferences;
 import qbittorrent.api.model.Torrent;
 
@@ -16,18 +18,18 @@ import java.util.Optional;
 
 public class ApiClient {
 
-    private final String host;
-    private final String port;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApiClient.class);
+
     private final String baseUrl;
     private final HttpClient client;
     private final Gson gson;
     private boolean loggedIn = false;
     private String authCookie;
 
-    ApiClient(String host, String port) {
-        this.host = host;
-        this.port = port;
+    public ApiClient(String host, String port) {
         this.baseUrl = "http://" + host + ":" + port;
+
+        LOGGER.info("Using qBittorrent url " + baseUrl);
         client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .build();
@@ -35,12 +37,14 @@ public class ApiClient {
     }
 
     public void login(String username, String password) {
+        LOGGER.info("Logging in user " + username);
         final String data = "username=" + username + "&password=" + password;
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(baseUrl + "/api/v2/auth/login?" + data))
             .header("Referer", baseUrl)
             .headers("Origin", baseUrl)
             .build();
+
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
@@ -81,6 +85,8 @@ public class ApiClient {
     }
 
     private String getRequest(String apiUrl) {
+        LOGGER.info("Making request to " + apiUrl + "...");
+
         if (!loggedIn) {
             throw new ApiException("You must log in to retrieve torrents");
         }

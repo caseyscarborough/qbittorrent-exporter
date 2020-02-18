@@ -7,7 +7,10 @@ import com.sun.net.httpserver.HttpServer;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.Gauge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qbittorrent.api.ApiClient;
+import qbittorrent.api.ApiException;
 import qbittorrent.api.model.Torrent;
 
 import java.io.IOException;
@@ -18,14 +21,41 @@ import java.util.stream.Collectors;
 
 public class App {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+
     private static final String USERNAME_ENV_KEY = "QBITTORRENT_USERNAME";
     private static final String PASSWORD_ENV_KEY = "QBITTORRENT_PASSWORD";
     private static final String HOST_ENV_KEY = "QBITTORRENT_HOST";
     private static final String PORT_ENV_KEY = "QBITTORRENT_PORT";
 
     public static void main(String[] args) throws IOException {
-        final ApiClient client = new ApiClient("192.168.1.11", "8083");
-        client.login("admin", "adminadmin");
+        String username = System.getenv(USERNAME_ENV_KEY);
+        String password = System.getenv(PASSWORD_ENV_KEY);
+        String host = System.getenv(HOST_ENV_KEY);
+        String port = System.getenv(PORT_ENV_KEY);
+
+        if (username == null) {
+            LOGGER.warn("Environment variable " + USERNAME_ENV_KEY + " is not available. Using default...");
+            username = "admin";
+        }
+
+        if (password == null) {
+            LOGGER.warn("Environment variable " + PASSWORD_ENV_KEY + " is not available. Using default...");
+            password = "adminadmin";
+        }
+
+        if (host == null) {
+            LOGGER.warn("Environment variable " + HOST_ENV_KEY + " is not available. Using default...");
+            host = "localhost";
+        }
+
+        if (port == null) {
+            LOGGER.warn("Environment variable " + PORT_ENV_KEY + " is not available. Using default...");
+            port = "8080";
+        }
+
+        final ApiClient client = new ApiClient(host, port);
+        client.login(username, password);
 
         PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         Gauge dlSpeed = Gauge.build()
@@ -120,34 +150,42 @@ public class App {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
             server.createContext("/metrics", httpExchange -> {
-                version.labels(client.getVersion()).set(1);
+                LOGGER.info("Beginning prometheus metrics collection...");
+                long current = System.nanoTime();
+                try {
+                    version.labels(client.getVersion()).set(1);
 
-                List<Torrent> torrents = client.getTorrents();
-                totalTorrents.set(torrents.size());
-                for (Torrent torrent : torrents) {
-                    dlSpeed.labels(torrent.getName()).set(torrent.getDlspeed());
-                    upSpeed.labels(torrent.getName()).set(torrent.getUpspeed());
-                    downloadedBytesTotal.labels(torrent.getName()).set(torrent.getDownloaded());
-                    downloadedBytesSession.labels(torrent.getName()).set(torrent.getDownloadedSession());
-                    uploadedBytesTotal.labels(torrent.getName()).set(torrent.getUploaded());
-                    uploadedBytesSession.labels(torrent.getName()).set(torrent.getUploadedSession());
-                    progress.labels(torrent.getName()).set(torrent.getProgress());
-                    timeActive.labels(torrent.getName()).set(torrent.getTimeActive());
-                    seeders.labels(torrent.getName()).set(torrent.getNumSeeds());
-                    leechers.labels(torrent.getName()).set(torrent.getNumLeechs());
-                    ratio.labels(torrent.getName()).set(torrent.getRatio());
-                    amountLeft.labels(torrent.getName()).set(torrent.getAmountLeft());
-                }
+                    List<Torrent> torrents = client.getTorrents();
+                    totalTorrents.set(torrents.size());
+                    for (Torrent torrent : torrents) {
+                        dlSpeed.labels(torrent.getName()).set(torrent.getDlspeed());
+                        upSpeed.labels(torrent.getName()).set(torrent.getUpspeed());
+                        downloadedBytesTotal.labels(torrent.getName()).set(torrent.getDownloaded());
+                        downloadedBytesSession.labels(torrent.getName()).set(torrent.getDownloadedSession());
+                        uploadedBytesTotal.labels(torrent.getName()).set(torrent.getUploaded());
+                        uploadedBytesSession.labels(torrent.getName()).set(torrent.getUploadedSession());
+                        progress.labels(torrent.getName()).set(torrent.getProgress());
+                        timeActive.labels(torrent.getName()).set(torrent.getTimeActive());
+                        seeders.labels(torrent.getName()).set(torrent.getNumSeeds());
+                        leechers.labels(torrent.getName()).set(torrent.getNumLeechs());
+                        ratio.labels(torrent.getName()).set(torrent.getRatio());
+                        amountLeft.labels(torrent.getName()).set(torrent.getAmountLeft());
+                    }
 
-                List<String> states = torrents.stream().map(Torrent::getState).distinct().collect(Collectors.toList());
-                for (String s : states) {
-                    state.labels(s).set(torrents.stream().filter(t -> t.getState().equals(s)).count());
-                }
+                    List<String> states = torrents.stream().map(Torrent::getState).distinct().collect(Collectors.toList());
+                    for (String s : states) {
+                        state.labels(s).set(torrents.stream().filter(t -> t.getState().equals(s)).count());
+                    }
 
-                String response = prometheusRegistry.scrape();
-                httpExchange.sendResponseHeaders(200, response.getBytes().length);
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                    os.write(response.getBytes());
+                    String response = prometheusRegistry.scrape();
+                    httpExchange.sendResponseHeaders(200, response.getBytes().length);
+                    try (OutputStream os = httpExchange.getResponseBody()) {
+                        os.write(response.getBytes());
+                    }
+
+                    LOGGER.info("Completed in " + (System.nanoTime() - current) / 1_000_000 + "ms");
+                } catch (ApiException e) {
+                    LOGGER.error("An error occurred calling API", e);
                 }
             });
 
