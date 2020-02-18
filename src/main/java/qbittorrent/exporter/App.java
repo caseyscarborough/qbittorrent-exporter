@@ -143,6 +143,12 @@ public class App {
             .help("The amount remaining for each torrent (in bytes)")
             .register(prometheusRegistry.getPrometheusRegistry());
 
+        Gauge size = Gauge.build()
+            .name("qbittorrent_size_bytes")
+            .labelNames("name")
+            .help("The size for each torrent (in bytes)")
+            .register(prometheusRegistry.getPrometheusRegistry());
+
         Gauge totalTorrents = Gauge.build()
             .name("qbittorrent_total_torrents")
             .help("The total number of torrents")
@@ -171,6 +177,7 @@ public class App {
                         leechers.labels(torrent.getName()).set(torrent.getNumLeechs());
                         ratio.labels(torrent.getName()).set(torrent.getRatio());
                         amountLeft.labels(torrent.getName()).set(torrent.getAmountLeft());
+                        size.labels(torrent.getName()).set(torrent.getSize());
                     }
 
                     List<String> states = torrents.stream().map(Torrent::getState).distinct().collect(Collectors.toList());
