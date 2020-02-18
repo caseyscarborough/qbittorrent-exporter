@@ -15,7 +15,6 @@ plugins {
 }
 
 group = 'qbittorent.exporter'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '13'
 
 repositories {
