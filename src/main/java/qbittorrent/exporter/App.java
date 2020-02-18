@@ -27,14 +27,13 @@ public class App {
     private static final String PASSWORD_ENV_KEY = "QBITTORRENT_PASSWORD";
     private static final String HOST_ENV_KEY = "QBITTORRENT_HOST";
     private static final String PORT_ENV_KEY = "QBITTORRENT_PORT";
-    private static final String METRICS_PORT_ENV_KEY = "METRICS_PORT";
+    public static final int METRICS_PORT = 17871;
 
     public static void main(String[] args) throws IOException {
         String username = System.getenv(USERNAME_ENV_KEY);
         String password = System.getenv(PASSWORD_ENV_KEY);
         String host = System.getenv(HOST_ENV_KEY);
         String port = System.getenv(PORT_ENV_KEY);
-        String metricsPort = System.getenv(METRICS_PORT_ENV_KEY);
 
         if (username == null) {
             LOGGER.warn("Environment variable " + USERNAME_ENV_KEY + " is not available. Using default...");
@@ -54,11 +53,6 @@ public class App {
         if (port == null) {
             LOGGER.warn("Environment variable " + PORT_ENV_KEY + " is not available. Using default...");
             port = "8080";
-        }
-
-        if (metricsPort == null) {
-            LOGGER.warn("Environment variable " + METRICS_PORT_ENV_KEY + " is not available. Using default...");
-            metricsPort = "18981";
         }
 
         final ApiClient client = new ApiClient(host, port);
@@ -155,7 +149,7 @@ public class App {
             .register(prometheusRegistry.getPrometheusRegistry());
 
         try {
-            HttpServer server = HttpServer.create(new InetSocketAddress(Integer.parseInt(metricsPort)), 0);
+            HttpServer server = HttpServer.create(new InetSocketAddress(METRICS_PORT), 0);
             server.createContext("/metrics", httpExchange -> {
                 LOGGER.info("Beginning prometheus metrics collection...");
                 long current = System.nanoTime();
