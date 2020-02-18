@@ -13,6 +13,7 @@ import qbittorrent.api.model.Torrent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,101 +60,134 @@ public class App {
         final ApiClient client = new ApiClient(host, port);
         client.login(username, password);
 
-        PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+        List<Gauge> gauges = new ArrayList<>();
         Gauge dlSpeed = Gauge.build()
             .name("qbittorrent_download_speed_bytes")
             .labelNames("name")
             .help("The current download speed of torrents (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(dlSpeed);
 
         Gauge upSpeed = Gauge.build()
             .name("qbittorrent_upload_speed_bytes")
             .labelNames("name")
             .help("The current upload speed of torrents (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(upSpeed);
 
         Gauge progress = Gauge.build()
             .name("qbittorrent_progress")
             .labelNames("name")
             .help("The current progress of torrents")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(progress);
 
         Gauge downloadedBytesTotal = Gauge.build()
             .name("qbittorrent_downloaded_bytes_total")
             .labelNames("name")
             .help("The current total download amount of torrents (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(downloadedBytesTotal);
 
         Gauge downloadedBytesSession = Gauge.build()
             .name("qbittorrent_downloaded_bytes_session")
             .labelNames("name")
             .help("The current session download amount of torrents (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(downloadedBytesSession);
 
         Gauge uploadedBytesTotal = Gauge.build()
             .name("qbittorrent_uploaded_bytes_total")
             .labelNames("name")
             .help("The current total upload amount of torrents (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(uploadedBytesTotal);
 
         Gauge uploadedBytesSession = Gauge.build()
             .name("qbittorrent_uploaded_bytes_session")
             .labelNames("name")
             .help("The current session upload amount of torrents (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(uploadedBytesSession);
 
         Gauge timeActive = Gauge.build()
             .name("qbittorrent_time_active")
             .labelNames("name")
             .help("The total active time (in seconds)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(timeActive);
 
         Gauge state = Gauge.build()
             .name("qbittorrent_state")
             .labelNames("name")
             .help("The current state of torrents")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(state);
 
         Gauge version = Gauge.build()
             .name("qbittorrent_version")
             .labelNames("version")
             .help("The current qBittorrent version")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(version);
 
         Gauge seeders = Gauge.build()
             .name("qbittorrent_seeders")
             .labelNames("name")
             .help("The current number of seeders for each torrent")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(seeders);
 
         Gauge leechers = Gauge.build()
             .name("qbittorrent_leechers")
             .labelNames("name")
             .help("The current number of leechers for each torrent")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(leechers);
 
         Gauge ratio = Gauge.build()
             .name("qbittorrent_ratio")
             .labelNames("name")
             .help("The current ratio each torrent")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(ratio);
 
         Gauge amountLeft = Gauge.build()
             .name("qbittorrent_amount_left_bytes")
             .labelNames("name")
             .help("The amount remaining for each torrent (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(amountLeft);
 
         Gauge size = Gauge.build()
             .name("qbittorrent_size_bytes")
             .labelNames("name")
             .help("The size for each torrent (in bytes)")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(size);
 
         Gauge totalTorrents = Gauge.build()
             .name("qbittorrent_total_torrents")
             .help("The total number of torrents")
-            .register(prometheusRegistry.getPrometheusRegistry());
+            .create();
+        gauges.add(totalTorrents);
+
+        Gauge info = Gauge.build()
+            .name("qbittorrent_info")
+            // Labels are named this way for displaying them in a table with Grafana.
+            // Columns can't be ordered and are ordered by name when using Prometheus
+            // as a datasource. You can override the column names in the table Column
+            // Style configuration.
+            // see https://github.com/grafana/grafana/issues/5082
+            .labelNames("_01_name", "_08_state", "_07_size", "_02_progress", "_05_seeders", "_06_leechers", "_03_dl_speed", "_04_up_speed")
+            .help("All info for torrents")
+            .create();
+        gauges.add(info);
+
+        PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+        for (Gauge gauge : gauges) {
+            gauge.register(prometheusRegistry.getPrometheusRegistry());
+        }
 
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(METRICS_PORT), 0);
@@ -161,6 +195,10 @@ public class App {
                 LOGGER.info("Beginning prometheus metrics collection...");
                 long current = System.nanoTime();
                 try {
+                    for (Gauge gauge : gauges) {
+                        gauge.clear();
+                    }
+
                     version.labels(client.getVersion()).set(1);
 
                     List<Torrent> torrents = client.getTorrents();
@@ -179,6 +217,15 @@ public class App {
                         ratio.labels(torrent.getName()).set(torrent.getRatio());
                         amountLeft.labels(torrent.getName()).set(torrent.getAmountLeft());
                         size.labels(torrent.getName()).set(torrent.getSize());
+                        info.labels(
+                            torrent.getName(),
+                            torrent.getState(),
+                            String.valueOf(torrent.getSize()),
+                            String.valueOf(torrent.getProgress()),
+                            String.valueOf(torrent.getNumSeeds()),
+                            String.valueOf(torrent.getNumLeechs()),
+                            String.valueOf(torrent.getDlspeed()),
+                            String.valueOf(torrent.getUpspeed())).set(1);
                     }
 
                     List<String> states = torrents.stream().map(Torrent::getState).distinct().collect(Collectors.toList());
