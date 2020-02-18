@@ -1,9 +1,9 @@
-package qbittorrent.exporter;
+package qbittorrent.api;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import qbittorrent.exporter.model.Preferences;
-import qbittorrent.exporter.model.Torrent;
+import qbittorrent.api.model.Preferences;
+import qbittorrent.api.model.Torrent;
 
 import java.io.IOException;
 import java.net.URI;

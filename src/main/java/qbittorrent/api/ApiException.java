@@ -1,4 +1,4 @@
-package qbittorrent.exporter;
+package qbittorrent.api;
 
 public class ApiException extends RuntimeException {
 

@@ -7,7 +7,8 @@ import com.sun.net.httpserver.HttpServer;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.Gauge;
-import qbittorrent.exporter.model.Torrent;
+import qbittorrent.api.ApiClient;
+import qbittorrent.api.model.Torrent;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -1,4 +1,4 @@
-package qbittorrent.exporter.model;
+package qbittorrent.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
