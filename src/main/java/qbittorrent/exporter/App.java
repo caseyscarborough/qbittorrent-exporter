@@ -111,12 +111,18 @@ public class App {
             .help("The amount remaining for each torrent (in bytes)")
             .register(prometheusRegistry.getPrometheusRegistry());
 
+        Gauge totalTorrents = Gauge.build()
+            .name("qbittorrent_total_torrents")
+            .help("The total number of torrents")
+            .register(prometheusRegistry.getPrometheusRegistry());
+
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
             server.createContext("/metrics", httpExchange -> {
                 version.labels(client.getVersion()).set(1);
 
                 List<Torrent> torrents = client.getTorrents();
+                totalTorrents.set(torrents.size());
                 for (Torrent torrent : torrents) {
                     dlSpeed.labels(torrent.getName()).set(torrent.getDlspeed());
                     upSpeed.labels(torrent.getName()).set(torrent.getUpspeed());
