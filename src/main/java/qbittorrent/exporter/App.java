@@ -24,7 +24,11 @@ public class App {
     private static final String PASSWORD_ENV_KEY = "QBITTORRENT_PASSWORD";
     private static final String HOST_ENV_KEY = "QBITTORRENT_HOST";
     private static final String PORT_ENV_KEY = "QBITTORRENT_PORT";
-    public static final int METRICS_PORT = 17871;
+    private static final String DEFAULT_USERNAME = "admin";
+    private static final String DEFAULT_PASSWORD = "adminadmin";
+    private static final String DEFAULT_HOST = "localhost";
+    private static final String DEFAULT_PORT = "8080";
+    private static final int METRICS_PORT = 17871;
 
     public static void main(String[] args) throws IOException {
         String username = System.getenv(USERNAME_ENV_KEY);
@@ -34,22 +38,22 @@ public class App {
 
         if (username == null) {
             LOGGER.warn("Environment variable " + USERNAME_ENV_KEY + " is not available. Using default...");
-            username = "admin";
+            username = DEFAULT_USERNAME;
         }
 
         if (password == null) {
             LOGGER.warn("Environment variable " + PASSWORD_ENV_KEY + " is not available. Using default...");
-            password = "adminadmin";
+            password = DEFAULT_PASSWORD;
         }
 
         if (host == null) {
             LOGGER.warn("Environment variable " + HOST_ENV_KEY + " is not available. Using default...");
-            host = "localhost";
+            host = DEFAULT_HOST;
         }
 
         if (port == null) {
             LOGGER.warn("Environment variable " + PORT_ENV_KEY + " is not available. Using default...");
-            port = "8080";
+            port = DEFAULT_PORT;
         }
 
         final ApiClient client = new ApiClient(host, port);
