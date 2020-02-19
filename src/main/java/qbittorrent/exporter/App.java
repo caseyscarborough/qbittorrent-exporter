@@ -62,17 +62,19 @@ public class App {
         client.login(username, password);
         LOGGER.info("Your qBittorrent version is " + client.getVersion() + ".");
 
+        List<Gauge> gauges = new ArrayList<>();
         Gauge dlSpeedTotal = Gauge.build()
             .name(GAUGE_NAME_PREFIX + "download_speed_bytes_total")
             .help("The total current download speed of all torrents (in bytes)")
             .create();
+        gauges.add(dlSpeedTotal);
 
         Gauge upSpeedTotal = Gauge.build()
             .name(GAUGE_NAME_PREFIX + "upload_speed_bytes_total")
             .help("The total current upload speed of all torrents (in bytes)")
             .create();
+        gauges.add(upSpeedTotal);
 
-        List<Gauge> gauges = new ArrayList<>();
         Gauge dlSpeed = Gauge.build()
             .name(GAUGE_NAME_PREFIX + "download_speed_bytes")
             .labelNames("name")
