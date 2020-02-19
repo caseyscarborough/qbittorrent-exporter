@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qbittorrent.api.model.MainData;
 import qbittorrent.api.model.Preferences;
 import qbittorrent.api.model.Torrent;
 
@@ -68,6 +69,11 @@ public class ApiClient {
         } catch (IOException | InterruptedException e) {
             throw new ApiException("Could not log in", e);
         }
+    }
+
+    public MainData getMainData() {
+        return getRequest("/sync/maindata", new TypeToken<>() {
+        });
     }
 
     public Preferences getPreferences() {

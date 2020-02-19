@@ -22,6 +22,46 @@ public class QbtCollector extends Collector implements QbtMetrics {
         .help("The current qBittorrent version")
         .create();
 
+    private final Gauge appMaxActiveDownloads = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_max_active_downloads")
+        .help("The max number of downloads allowed")
+        .create();
+
+    private final Gauge appMaxActiveUploads = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_max_active_uploads")
+        .help("The max number of active uploads allowed")
+        .create();
+
+    private final Gauge appMaxActiveTorrents = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_max_active_torrents")
+        .help("The max number of active torrents allowed")
+        .create();
+
+    private final Gauge appDownloadRateLimitBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_download_rate_limit_bytes")
+        .help("The global download rate limit (in bytes)")
+        .create();
+
+    private final Gauge appUploadRateLimitBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_upload_rate_limit_bytes")
+        .help("The global upload rate limit (in bytes)")
+        .create();
+
+    private final Gauge appAlternateDownloadRateLimitBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_alt_download_rate_limit_bytes")
+        .help("The alternate download rate limit (in bytes)")
+        .create();
+
+    private final Gauge appAlternateUploadRateLimitBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_alt_upload_rate_limit_bytes")
+        .help("The alternate upload rate limit (in bytes)")
+        .create();
+
+    private final Gauge appAlternateRateLimitsEnabled = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "app_alt_rate_limits_enabled")
+        .help("If alternate rate limits are enabled")
+        .create();
+
     // endregion
 
     // region Torrent Metrics
@@ -123,26 +163,41 @@ public class QbtCollector extends Collector implements QbtMetrics {
 
     // endregion
 
-    // region Total Metrics
+    // region Global Metrics
 
-    private final Gauge totalDownloadedBytes = Gauge.build()
-        .name(GAUGE_NAME_PREFIX + "total_downloaded_bytes")
-        .help("The current total download amount of torrents (in bytes)")
+    private final Gauge globalAlltimeDownloadedBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "glabal_alltime_downloaded_bytes")
+        .help("The all-time total download amount of torrents (in bytes)")
         .create();
 
-    private final Gauge totalUploadedBytes = Gauge.build()
-        .name(GAUGE_NAME_PREFIX + "total_uploaded_bytes")
-        .help("The current total upload amount of torrents (in bytes)")
+    private final Gauge globalAlltimeUploadedBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "global_alltime_uploaded_bytes")
+        .help("The all-time total upload amount of torrents (in bytes)")
         .create();
 
-    private final Gauge totalDownloadSpeedBytes = Gauge.build()
-        .name(GAUGE_NAME_PREFIX + "total_download_speed_bytes")
-        .help("The total current download speed of all torrents (in bytes)")
+    private final Gauge globalSessionDownloadedBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "glabal_session_downloaded_bytes")
+        .help("The total download amount of torrents for this session (in bytes)")
         .create();
 
-    private final Gauge totalUploadSpeedBytes = Gauge.build()
+    private final Gauge globalSessionUploadedBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "global_session_uploaded_bytes")
+        .help("The total upload amount of torrents for this session (in bytes)")
+        .create();
+
+    private final Gauge globalDownloadSpeedBytes = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "global_download_speed_bytes")
+        .help("The current download speed of all torrents (in bytes)")
+        .create();
+
+    private final Gauge globalUploadSpeedBytes = Gauge.build()
         .name(GAUGE_NAME_PREFIX + "total_upload_speed_bytes")
         .help("The total current upload speed of all torrents (in bytes)")
+        .create();
+
+    private final Gauge globalRatio = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "global_ratio")
+        .help("The current global ratio of all torrents")
         .create();
 
     private final Gauge totalTorrents = Gauge.build()
@@ -170,10 +225,21 @@ public class QbtCollector extends Collector implements QbtMetrics {
         output.add(torrentSessionUploadedBytes);
         output.add(torrentTotalDownloadedBytes);
         output.add(torrentTotalUploadedBytes);
-        output.add(totalDownloadedBytes);
-        output.add(totalUploadedBytes);
-        output.add(totalDownloadSpeedBytes);
-        output.add(totalUploadSpeedBytes);
+        output.add(appMaxActiveDownloads);
+        output.add(appMaxActiveUploads);
+        output.add(appMaxActiveTorrents);
+        output.add(appDownloadRateLimitBytes);
+        output.add(appUploadRateLimitBytes);
+        output.add(appAlternateDownloadRateLimitBytes);
+        output.add(appAlternateUploadRateLimitBytes);
+        output.add(appAlternateRateLimitsEnabled);
+        output.add(globalAlltimeDownloadedBytes);
+        output.add(globalAlltimeUploadedBytes);
+        output.add(globalSessionDownloadedBytes);
+        output.add(globalSessionUploadedBytes);
+        output.add(globalDownloadSpeedBytes);
+        output.add(globalUploadSpeedBytes);
+        output.add(globalRatio);
         output.add(totalTorrents);
         return output;
     }
@@ -287,29 +353,85 @@ public class QbtCollector extends Collector implements QbtMetrics {
     }
 
     @Override
-    public void setTotalDownloadedBytes(double value) {
-        totalDownloadedBytes.set(value);
-    }
-
-    @Override
-    public void setTotalUploadedBytes(double value) {
-        totalUploadedBytes.set(value);
-    }
-
-    @Override
-    public void setTotalDownloadSpeedBytes(double value) {
-        totalDownloadSpeedBytes.set(value);
-    }
-
-    @Override
-    public void setTotalUploadSpeedBytes(double value) {
-        totalUploadSpeedBytes.set(value);
-    }
-
-    @Override
     public void setTotalTorrents(int value) {
         totalTorrents.set(value);
     }
+
+    @Override
+    public void setAppMaxActiveDownloads(double value) {
+        appMaxActiveDownloads.set(value);
+    }
+
+    @Override
+    public void setAppMaxActiveUploads(double value) {
+        appMaxActiveUploads.set(value);
+    }
+
+    @Override
+    public void setAppMaxActiveTorrents(double value) {
+        appMaxActiveTorrents.set(value);
+    }
+
+    @Override
+    public void setAppDownloadRateLimitBytes(double value) {
+        appDownloadRateLimitBytes.set(value);
+    }
+
+    @Override
+    public void setAppUploadRateLimitBytes(double value) {
+        appUploadRateLimitBytes.set(value);
+    }
+
+    @Override
+    public void setAppAlternateDownloadRateLimitBytes(double value) {
+        appAlternateDownloadRateLimitBytes.set(value);
+    }
+
+    @Override
+    public void setAppAlternateUploadRateLimitBytes(double value) {
+        appAlternateUploadRateLimitBytes.set(value);
+    }
+
+    @Override
+    public void setAppAlternateRateLimitsEnabled(boolean enabled) {
+        appAlternateRateLimitsEnabled.set(enabled ? 1 : 0);
+    }
+
+    @Override
+    public void setGlobalAlltimeDownloadedBytes(double value) {
+        globalAlltimeDownloadedBytes.set(value);
+    }
+
+    @Override
+    public void setGlobalAlltimeUploadedBytes(double value) {
+        globalAlltimeUploadedBytes.set(value);
+    }
+
+    @Override
+    public void setGlobalSessionDownloadedBytes(double value) {
+        globalSessionDownloadedBytes.set(value);
+    }
+
+    @Override
+    public void setGlobalSessionUploadedBytes(double value) {
+        globalSessionUploadedBytes.set(value);
+    }
+
+    @Override
+    public void setGlobalDownloadSpeedBytes(double value) {
+        globalDownloadSpeedBytes.set(value);
+    }
+
+    @Override
+    public void setGlobalUploadSpeedBytes(double value) {
+        globalUploadSpeedBytes.set(value);
+    }
+
+    @Override
+    public void setGlobalRatio(double value) {
+        globalRatio.set(value);
+    }
+
 
     // endregion
 }

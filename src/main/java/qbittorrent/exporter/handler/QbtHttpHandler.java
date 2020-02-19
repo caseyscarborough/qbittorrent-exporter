@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qbittorrent.api.ApiClient;
 import qbittorrent.api.ApiException;
+import qbittorrent.api.model.MainData;
+import qbittorrent.api.model.Preferences;
+import qbittorrent.api.model.ServerState;
 import qbittorrent.api.model.Torrent;
 import qbittorrent.exporter.collector.QbtCollector;
 
@@ -38,13 +41,27 @@ public class QbtHttpHandler implements HttpHandler {
         long current = System.nanoTime();
         try {
             List<Torrent> torrents = client.getTorrents();
+            Preferences preferences = client.getPreferences();
+            MainData data = client.getMainData();
+            ServerState serverState = data.getServerState();
             collector.clear();
             collector.setAppVersion(client.getVersion());
             collector.setTotalTorrents(torrents.size());
-            collector.setTotalDownloadSpeedBytes(torrents.stream().mapToDouble(Torrent::getDownloadSpeed).sum());
-            collector.setTotalUploadSpeedBytes(torrents.stream().mapToDouble(Torrent::getUploadSpeed).sum());
-            collector.setTotalDownloadedBytes(torrents.stream().mapToDouble(Torrent::getDownloaded).sum());
-            collector.setTotalUploadedBytes(torrents.stream().mapToDouble(Torrent::getUploaded).sum());
+            collector.setGlobalAlltimeDownloadedBytes(serverState.getAlltimeDl());
+            collector.setGlobalAlltimeUploadedBytes(serverState.getAlltimeUl());
+            collector.setGlobalSessionDownloadedBytes(serverState.getDlInfoData());
+            collector.setGlobalSessionUploadedBytes(serverState.getUpInfoData());
+            collector.setGlobalDownloadSpeedBytes(serverState.getDlInfoSpeed());
+            collector.setGlobalUploadSpeedBytes(serverState.getUpInfoSpeed());
+            collector.setGlobalRatio(Double.parseDouble(serverState.getGlobalRatio()));
+            collector.setAppDownloadRateLimitBytes(serverState.getDlRateLimit());
+            collector.setAppUploadRateLimitBytes(serverState.getUpRateLimit());
+            collector.setAppAlternateDownloadRateLimitBytes(preferences.getAltDlLimit());
+            collector.setAppAlternateUploadRateLimitBytes(preferences.getAltUpLimit());
+            collector.setAppAlternateRateLimitsEnabled(serverState.isUseAltSpeedLimits());
+            collector.setAppMaxActiveDownloads(preferences.getMaxActiveDownloads());
+            collector.setAppMaxActiveUploads(preferences.getMaxActiveUploads());
+            collector.setAppMaxActiveTorrents(preferences.getMaxActiveTorrents());
 
             for (Torrent torrent : torrents) {
                 collector.setTorrentDownloadSpeedBytes(torrent.getName(), torrent.getDownloadSpeed());
