@@ -1,6 +1,6 @@
 # qbittorrent-exporter
 
-This app is a Prometheus exporter for the qBittorrent application.
+This app is a Prometheus exporter for the qBittorrent application. You must have version 4.1.0 of qBittorrent or higher for this plugin to work.
 
 ## Usage
 
