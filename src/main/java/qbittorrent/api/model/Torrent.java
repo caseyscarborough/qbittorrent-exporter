@@ -29,7 +29,7 @@ public class Torrent {
     private String savePath;
 
     @SerializedName("num_seeds")
-    private long numSeeds;
+    private int numSeeds;
 
     @SerializedName("dl_limit")
     private long dlLimit;
@@ -41,7 +41,7 @@ public class Torrent {
     private long lastActivity;
 
     @SerializedName("num_leechs")
-    private long numLeechs;
+    private int numLeechs;
 
     @SerializedName("num_complete")
     private long numComplete;
@@ -197,11 +197,11 @@ public class Torrent {
         this.savePath = savePath;
     }
 
-    public long getNumSeeds() {
+    public int getNumSeeds() {
         return numSeeds;
     }
 
-    public void setNumSeeds(long numSeeds) {
+    public void setNumSeeds(int numSeeds) {
         this.numSeeds = numSeeds;
     }
 
@@ -229,11 +229,11 @@ public class Torrent {
         this.lastActivity = lastActivity;
     }
 
-    public long getNumLeechs() {
+    public int getNumLeechs() {
         return numLeechs;
     }
 
-    public void setNumLeechs(long numLeechs) {
+    public void setNumLeechs(int numLeechs) {
         this.numLeechs = numLeechs;
     }
 
@@ -365,7 +365,7 @@ public class Torrent {
         this.superSeeding = superSeeding;
     }
 
-    public long getUpspeed() {
+    public long getUploadSpeed() {
         return upspeed;
     }
 
@@ -453,7 +453,7 @@ public class Torrent {
         this.category = category;
     }
 
-    public long getDlspeed() {
+    public long getDownloadSpeed() {
         return dlspeed;
     }
 
