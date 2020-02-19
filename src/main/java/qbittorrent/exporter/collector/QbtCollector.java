@@ -166,7 +166,7 @@ public class QbtCollector extends Collector implements QbtMetrics {
     // region Global Metrics
 
     private final Gauge globalAlltimeDownloadedBytes = Gauge.build()
-        .name(GAUGE_NAME_PREFIX + "glabal_alltime_downloaded_bytes")
+        .name(GAUGE_NAME_PREFIX + "global_alltime_downloaded_bytes")
         .help("The all-time total download amount of torrents (in bytes)")
         .create();
 
@@ -176,7 +176,7 @@ public class QbtCollector extends Collector implements QbtMetrics {
         .create();
 
     private final Gauge globalSessionDownloadedBytes = Gauge.build()
-        .name(GAUGE_NAME_PREFIX + "glabal_session_downloaded_bytes")
+        .name(GAUGE_NAME_PREFIX + "global_session_downloaded_bytes")
         .help("The total download amount of torrents for this session (in bytes)")
         .create();
 
@@ -191,7 +191,7 @@ public class QbtCollector extends Collector implements QbtMetrics {
         .create();
 
     private final Gauge globalUploadSpeedBytes = Gauge.build()
-        .name(GAUGE_NAME_PREFIX + "total_upload_speed_bytes")
+        .name(GAUGE_NAME_PREFIX + "global_upload_speed_bytes")
         .help("The total current upload speed of all torrents (in bytes)")
         .create();
 
@@ -201,7 +201,7 @@ public class QbtCollector extends Collector implements QbtMetrics {
         .create();
 
     private final Gauge totalTorrents = Gauge.build()
-        .name(GAUGE_NAME_PREFIX + "total_torrents")
+        .name(GAUGE_NAME_PREFIX + "global_torrents")
         .help("The total number of torrents")
         .create();
 
