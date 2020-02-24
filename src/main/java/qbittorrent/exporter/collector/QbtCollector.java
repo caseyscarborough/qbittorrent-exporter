@@ -80,6 +80,7 @@ public class QbtCollector extends Collector implements QbtMetrics {
 
     private final Gauge torrentEta = Gauge.build()
         .name(GAUGE_NAME_PREFIX + "torrent_eta")
+        .labelNames("name")
         .help("The current ETA for each torrent (in seconds)")
         .create();
 
