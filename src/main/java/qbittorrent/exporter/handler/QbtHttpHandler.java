@@ -70,6 +70,7 @@ public class QbtHttpHandler implements HttpHandler {
                 collector.setTorrentSessionDownloadedBytes(torrent.getName(), torrent.getDownloadedSession());
                 collector.setTorrentTotalUploadedBytes(torrent.getName(), torrent.getUploaded());
                 collector.setTorrentSessionUploadedBytes(torrent.getName(), torrent.getUploadedSession());
+                collector.setTorrentEta(torrent.getName(), torrent.getEta());
                 collector.setTorrentProgress(torrent.getName(), torrent.getProgress());
                 collector.setTorrentTimeActive(torrent.getName(), torrent.getTimeActive());
                 collector.setTorrentSeeders(torrent.getName(), torrent.getNumSeeds());

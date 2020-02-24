@@ -78,6 +78,11 @@ public class QbtCollector extends Collector implements QbtMetrics {
         .help("The current upload speed of torrents (in bytes)")
         .create();
 
+    private final Gauge torrentEta = Gauge.build()
+        .name(GAUGE_NAME_PREFIX + "torrent_eta")
+        .help("The current ETA for each torrent (in seconds)")
+        .create();
+
     private final Gauge torrentProgress = Gauge.build()
         .name(GAUGE_NAME_PREFIX + "torrent_progress")
         .labelNames("name")
@@ -212,6 +217,7 @@ public class QbtCollector extends Collector implements QbtMetrics {
         output.add(appVersion);
         output.add(torrentDownloadSpeedBytes);
         output.add(torrentUploadSpeedBytes);
+        output.add(torrentEta);
         output.add(torrentProgress);
         output.add(torrentTimeActive);
         output.add(torrentStates);
@@ -275,6 +281,11 @@ public class QbtCollector extends Collector implements QbtMetrics {
     @Override
     public void setTorrentUploadSpeedBytes(String name, double value) {
         torrentUploadSpeedBytes.labels(name).set(value);
+    }
+
+    @Override
+    public void setTorrentEta(String name, double value) {
+        torrentEta.labels(name).set(value);
     }
 
     @Override

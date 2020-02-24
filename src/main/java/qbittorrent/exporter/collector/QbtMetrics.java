@@ -15,6 +15,7 @@ public interface QbtMetrics {
     void setAppAlternateRateLimitsEnabled(boolean enabled);
     void setTorrentDownloadSpeedBytes(String name, double value);
     void setTorrentUploadSpeedBytes(String name, double value);
+    void setTorrentEta(String name, double value);
     void setTorrentProgress(String name, double value);
     void setTorrentTimeActive(String name, double value);
     void setTorrentStates(String name, long value);
