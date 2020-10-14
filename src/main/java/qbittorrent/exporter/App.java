@@ -66,6 +66,7 @@ public class App {
             server.createContext("/metrics", handler);
             new Thread(server::start).start();
         } catch (IOException e) {
+            LOGGER.error("Could not start HTTP server", e);
             throw new RuntimeException(e);
         }
     }

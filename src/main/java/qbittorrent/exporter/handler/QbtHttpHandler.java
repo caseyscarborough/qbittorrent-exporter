@@ -96,6 +96,8 @@ public class QbtHttpHandler implements HttpHandler {
             LOGGER.info("Completed in " + (System.nanoTime() - current) / 1_000_000 + "ms");
         } catch (ApiException e) {
             LOGGER.error("An error occurred calling API", e);
+        } catch (Exception e) {
+            LOGGER.error("An unhandled error occurred", e);
         }
     }
 }
