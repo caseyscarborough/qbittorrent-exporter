@@ -2,6 +2,8 @@
 
 This app is a Prometheus exporter for the qBittorrent application. You must have version 4.1.0 of qBittorrent or higher for this plugin to work.
 
+See it on [DockerHub](https://hub.docker.com/r/caseyscarborough/qbittorrent-exporter).
+
 ## Usage
 
 ### docker
@@ -14,7 +16,7 @@ docker create \
     -e QBITTORRENT_HOST=localhost    `# defaults to 'localhost'` \
     -e QBITTORRENT_PORT=8080         `# defaults to '8080'` \
     -p 17871:17871 \
-    blacktide/qbittorrent-exporter
+    caseyscarborough/qbittorrent-exporter:latest
 ```
 
 ## Parameters
@@ -46,8 +48,8 @@ scrape_configs:
 Build the app and the docker container using the following commands:
 
 ```bash
-git clone https://gitlab.com/blacktide/qbittorrent-exporter.git
+git clone https://gitlab.com/caseyscarborough/qbittorrent-exporter.git
 cd qbittorrent-exporter
-./gradlew jar
-docker build -t blacktide/qbittorrent-exporter .
+./gradlew build
+docker build .
 ```
