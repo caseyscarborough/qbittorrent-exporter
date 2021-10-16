@@ -15,7 +15,7 @@ plugins {
 }
 
 group = 'qbittorent.exporter'
-sourceCompatibility = '13'
+sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
