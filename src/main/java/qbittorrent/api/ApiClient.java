@@ -107,10 +107,14 @@ public class ApiClient {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
-                return response.body();
+            final int statusCode = response.statusCode();
+            LOGGER.info("Response from {} endpoint was {}.", apiUrl, statusCode);
+            if (statusCode == 200) {
+                final String body = response.body();
+                LOGGER.debug("JSON result from {} call: {}", apiUrl, body);
+                return body;
             } else {
-                throw new ApiException("An error occurred calling " + apiUrl + ": (" + response.statusCode() + ") " + response.body());
+                throw new ApiException("An error occurred calling " + apiUrl + ": (" + statusCode + ") " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             throw new ApiException("Could not get torrent list", e);

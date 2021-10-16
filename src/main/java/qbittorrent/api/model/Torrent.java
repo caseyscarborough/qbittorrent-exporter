@@ -8,7 +8,7 @@ public class Torrent {
     private long amountLeft;
 
     @SerializedName("max_ratio")
-    private long maxRatio;
+    private double maxRatio;
 
     @SerializedName("auto_tmm")
     private boolean autoTmm;
@@ -59,7 +59,7 @@ public class Torrent {
     private long completionOn;
 
     @SerializedName("ratio_limit")
-    private long ratioLimit;
+    private double ratioLimit;
 
     @SerializedName("state")
     private String state;
@@ -141,11 +141,11 @@ public class Torrent {
         this.amountLeft = amountLeft;
     }
 
-    public long getMaxRatio() {
+    public double getMaxRatio() {
         return maxRatio;
     }
 
-    public void setMaxRatio(long maxRatio) {
+    public void setMaxRatio(double maxRatio) {
         this.maxRatio = maxRatio;
     }
 
@@ -277,11 +277,11 @@ public class Torrent {
         this.completionOn = completionOn;
     }
 
-    public long getRatioLimit() {
+    public double getRatioLimit() {
         return ratioLimit;
     }
 
-    public void setRatioLimit(long ratioLimit) {
+    public void setRatioLimit(double ratioLimit) {
         this.ratioLimit = ratioLimit;
     }
 
