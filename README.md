@@ -48,7 +48,7 @@ scrape_configs:
 Build the app and the docker container using the following commands:
 
 ```bash
-git clone https://gitlab.com/caseyscarborough/qbittorrent-exporter.git
+git clone https://github.com/caseyscarborough/qbittorrent-exporter.git
 cd qbittorrent-exporter
 ./gradlew build
 docker build .
