@@ -134,12 +134,25 @@ public class QbtCollector extends Collector implements QbtMetrics {
 
     private final Gauge torrentInfo = Gauge.build()
         .name(GAUGE_NAME_PREFIX + "torrent_info")
-        // Labels are named this way for displaying them in a table with Grafana.
-        // Columns can't be ordered and are ordered by name when using Prometheus
-        // as a datasource. You can override the column names in the table Column
-        // Style configuration.
-        // see https://github.com/grafana/grafana/issues/5082
-        .labelNames("_01_name", "_08_state", "_07_size", "_02_progress", "_05_seeders", "_06_leechers", "_03_dl_speed", "_04_up_speed", "_09_amount_left", "_10_time_active", "_11_eta")
+        .labelNames(
+            "name",
+            "state",
+            "size",
+            "progress",
+            "seeders",
+            "leechers",
+            "dl_speed",
+            "up_speed",
+            "amount_left",
+            "time_active",
+            "eta",
+            "uploaded",
+            "uploaded_session",
+            "downloaded",
+            "downloaded_session",
+            "max_ratio",
+            "ratio"
+        )
         .help("All info for torrents")
         .create();
 
@@ -342,7 +355,14 @@ public class QbtCollector extends Collector implements QbtMetrics {
             String.valueOf(torrent.getUploadSpeed()),
             String.valueOf(torrent.getAmountLeft()),
             String.valueOf(torrent.getTimeActive()),
-            String.valueOf(torrent.getEta())).set(1);
+            String.valueOf(torrent.getEta()),
+            String.valueOf(torrent.getUploaded()),
+            String.valueOf(torrent.getUploadedSession()),
+            String.valueOf(torrent.getDownloaded()),
+            String.valueOf(torrent.getDownloadedSession()),
+            String.valueOf(torrent.getMaxRatio()),
+            String.valueOf(torrent.getRatio())
+        ).set(1);
     }
 
     @Override
@@ -444,7 +464,6 @@ public class QbtCollector extends Collector implements QbtMetrics {
     public void setGlobalRatio(double value) {
         globalRatio.set(value);
     }
-
 
     // endregion
 }

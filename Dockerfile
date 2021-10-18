@@ -1,5 +1,7 @@
-FROM adoptopenjdk/openjdk13:jre-13.0.2_8-alpine
+FROM openjdk:17
+# Run ./gradlew installDist before running Docker build
 
-COPY build/libs/qbittorrent-exporter.jar /opt/qbittorrent-exporter.jar
-CMD java -jar /opt/qbittorrent-exporter.jar
+COPY build/install/qbittorrent-exporter /opt/qbittorrent-exporter
+ENTRYPOINT ["/opt/qbittorrent-exporter/bin/qbittorrent-exporter"]
+
 EXPOSE 17871

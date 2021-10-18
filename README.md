@@ -1,6 +1,10 @@
 # qbittorrent-exporter
 
+<img src="https://github.com/caseyscarborough/qbittorrent-grafana-dashboard/blob/master/images/logo.png" width=100> <img src="https://github.com/caseyscarborough/qbittorrent-grafana-dashboard/blob/master/images/prometheus.png" width=100>
+
 This app is a Prometheus exporter for the qBittorrent application. You must have version 4.1.0 of qBittorrent or higher for this plugin to work.
+
+This is especially useful when integrated with the [qbittorrent-grafana-dashboard](https://github.com/caseyscarborough/qbittorrent-grafana-dashboard).
 
 See it on [DockerHub](https://hub.docker.com/r/caseyscarborough/qbittorrent-exporter).
 
@@ -9,7 +13,7 @@ See it on [DockerHub](https://hub.docker.com/r/caseyscarborough/qbittorrent-expo
 ### docker
 
 ```bash
-docker create \
+docker run \
     --name=qbittorrent-exporter \
     -e QBITTORRENT_USERNAME=username `# defaults to 'admin'` \
     -e QBITTORRENT_PASSWORD=password `# defaults to 'adminadmin'` \
@@ -31,7 +35,7 @@ docker create \
 
 ## Setup
 
-Add the target to your `scrape_configs` in your `prometheus.yml` configuration file. 
+Add the target to your `scrape_configs` in your `prometheus.yml` configuration file of your Prometheus server. 
 
 ```yml
 scrape_configs:

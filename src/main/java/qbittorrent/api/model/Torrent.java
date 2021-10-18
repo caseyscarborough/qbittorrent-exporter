@@ -457,7 +457,7 @@ public class Torrent {
         return dlspeed;
     }
 
-    public void setDlspeed(long dlspeed) {
+    public void setDownloadSpeed(long dlspeed) {
         this.dlspeed = dlspeed;
     }
 
