@@ -1,12 +1,13 @@
 package qbittorrent.exporter.handler;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.util.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qbittorrent.api.ApiClient;
-import qbittorrent.api.ApiException;
 import qbittorrent.api.model.MainData;
 import qbittorrent.api.model.Preferences;
 import qbittorrent.api.model.ServerState;
@@ -14,8 +15,6 @@ import qbittorrent.api.model.Torrent;
 import qbittorrent.exporter.collector.QbtCollector;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,17 +26,15 @@ public class QbtHttpHandler implements HttpHandler {
     private final QbtCollector collector;
     private final ApiClient client;
 
-    public QbtHttpHandler(ApiClient client,
-                          PrometheusMeterRegistry registry,
-                          QbtCollector collector) {
+    public QbtHttpHandler(final ApiClient client) throws IOException {
         this.client = client;
-        this.registry = registry;
-        this.collector = collector;
-        registry.getPrometheusRegistry().register(collector);
+        this.registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+        this.collector = new QbtCollector();
+        this.registry.getPrometheusRegistry().register(collector);
     }
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    public void handleRequest(HttpServerExchange exchange) throws Exception {
         LOGGER.info("Beginning prometheus metrics collection...");
         long current = System.nanoTime();
         try {
@@ -88,18 +85,14 @@ public class QbtHttpHandler implements HttpHandler {
                 collector.setTorrentStates(state, count);
             }
 
-            String response = registry.scrape();
-            byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
-            exchange.sendResponseHeaders(200, bytes.length);
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(bytes);
-            }
-
             LOGGER.info("Completed in " + (System.nanoTime() - current) / 1_000_000 + "ms");
-        } catch (ApiException e) {
-            LOGGER.error("An error occurred calling API", e);
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(registry.scrape());
         } catch (Exception e) {
-            LOGGER.error("An unhandled error occurred", e);
+            LOGGER.error("An error occurred calling API", e);
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.setStatusCode(500);
+            exchange.getResponseSender().send("An error occurred. " + e.getMessage());
         }
     }
 }

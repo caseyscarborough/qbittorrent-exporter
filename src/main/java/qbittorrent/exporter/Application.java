@@ -1,21 +1,18 @@
 package qbittorrent.exporter;
 
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-import io.micrometer.prometheus.PrometheusConfig;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.undertow.Undertow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qbittorrent.api.ApiClient;
-import qbittorrent.exporter.collector.QbtCollector;
 import qbittorrent.exporter.handler.QbtHttpHandler;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 
-public class App {
+import static io.undertow.Handlers.path;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+public class Application {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     private static final String USERNAME_ENV_KEY = "QBITTORRENT_USERNAME";
     private static final String PASSWORD_ENV_KEY = "QBITTORRENT_PASSWORD";
@@ -56,18 +53,18 @@ public class App {
         final ApiClient client = new ApiClient(host, port);
         client.login(username, password);
         LOGGER.info("Your qBittorrent version is " + client.getVersion() + ".");
-
-        PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
-        QbtCollector collector = new QbtCollector();
-        HttpHandler handler = new QbtHttpHandler(client, registry, collector);
-
         try {
-            HttpServer server = HttpServer.create(new InetSocketAddress(METRICS_PORT), 0);
-            server.createContext("/metrics", handler);
-            new Thread(server::start).start();
+            final QbtHttpHandler handler = new QbtHttpHandler(client);
+            final Undertow server = Undertow.builder()
+                .setIoThreads(2)
+                .setWorkerThreads(10)
+                .addHttpListener(METRICS_PORT, "127.0.0.1")
+                .setHandler(path().addPrefixPath("/metrics", handler))
+                .build();
+            server.start();
+            LOGGER.info("Server is listening for connections at http://127.0.0.1:" + METRICS_PORT + "/metrics");
         } catch (IOException e) {
-            LOGGER.error("Could not start HTTP server", e);
-            throw new RuntimeException(e);
+            LOGGER.error("Unable to start HTTP server", e);
         }
     }
 }
