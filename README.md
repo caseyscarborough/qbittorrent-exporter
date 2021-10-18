@@ -1,6 +1,10 @@
 # qbittorrent-exporter
 
+<img src="https://github.com/caseyscarborough/qbittorrent-grafana-dashboard/blob/master/images/logo.png" width=100> <img src="https://github.com/caseyscarborough/qbittorrent-grafana-dashboard/blob/master/images/prometheus.png" width=100>
+
 This app is a Prometheus exporter for the qBittorrent application. You must have version 4.1.0 of qBittorrent or higher for this plugin to work.
+
+This is especially useful when integrated with the [qbittorrent-grafana-dashboard](https://github.com/caseyscarborough/qbittorrent-grafana-dashboard).
 
 See it on [DockerHub](https://hub.docker.com/r/caseyscarborough/qbittorrent-exporter).
 
