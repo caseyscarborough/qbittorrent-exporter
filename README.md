@@ -9,7 +9,7 @@ See it on [DockerHub](https://hub.docker.com/r/caseyscarborough/qbittorrent-expo
 ### docker
 
 ```bash
-docker create \
+docker run \
     --name=qbittorrent-exporter \
     -e QBITTORRENT_USERNAME=username `# defaults to 'admin'` \
     -e QBITTORRENT_PASSWORD=password `# defaults to 'adminadmin'` \
@@ -31,7 +31,7 @@ docker create \
 
 ## Setup
 
-Add the target to your `scrape_configs` in your `prometheus.yml` configuration file. 
+Add the target to your `scrape_configs` in your `prometheus.yml` configuration file of your Prometheus server. 
 
 ```yml
 scrape_configs:
