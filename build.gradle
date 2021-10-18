@@ -22,10 +22,12 @@ repositories {
 }
 
 dependencies {
-    // This dependency is used by the application.
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.32'
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
 
+    implementation 'io.undertow:undertow-core:2.2.12.Final'
+    implementation 'io.undertow:undertow-servlet:2.2.12.Final'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'io.prometheus:simpleclient:0.12.0'
     implementation 'io.micrometer:micrometer-registry-prometheus:1.7.5'
@@ -37,5 +39,5 @@ test {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'qbittorrent.exporter.App'
+    mainClassName = 'qbittorrent.exporter.Application'
 }
