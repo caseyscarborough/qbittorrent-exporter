@@ -15,6 +15,7 @@ import qbittorrent.exporter.collector.QbtCollector;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,9 +89,10 @@ public class QbtHttpHandler implements HttpHandler {
             }
 
             String response = registry.scrape();
-            exchange.sendResponseHeaders(200, response.getBytes().length);
+            byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(200, bytes.length);
             try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
+                os.write(bytes);
             }
 
             LOGGER.info("Completed in " + (System.nanoTime() - current) / 1_000_000 + "ms");
