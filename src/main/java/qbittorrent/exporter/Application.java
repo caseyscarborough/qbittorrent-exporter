@@ -58,11 +58,11 @@ public class Application {
             final Undertow server = Undertow.builder()
                 .setIoThreads(2)
                 .setWorkerThreads(10)
-                .addHttpListener(METRICS_PORT, "127.0.0.1")
+                .addHttpListener(METRICS_PORT, "0.0.0.0")
                 .setHandler(path().addPrefixPath("/metrics", handler))
                 .build();
             server.start();
-            LOGGER.info("Server is listening for connections at http://127.0.0.1:" + METRICS_PORT + "/metrics");
+            LOGGER.info("Server is listening for connections at http://0.0.0.0:" + METRICS_PORT + "/metrics");
         } catch (IOException e) {
             LOGGER.error("Unable to start HTTP server", e);
         }

@@ -86,7 +86,7 @@ public class QbtHttpHandler implements HttpHandler {
             }
 
             LOGGER.info("Completed in " + (System.nanoTime() - current) / 1_000_000 + "ms");
-            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain;charset=utf-8");
             exchange.getResponseSender().send(registry.scrape());
         } catch (Exception e) {
             LOGGER.error("An error occurred calling API", e);
