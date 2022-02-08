@@ -1,5 +1,7 @@
 # qbittorrent-exporter
 
+![Gradle Build](https://github.com/caseyscarborough/qbittorrent-exporter/actions/workflows/build.yaml/badge.svg) ![Release](https://github.com/caseyscarborough/qbittorrent-exporter/actions/workflows/release.yaml/badge.svg)
+
 <img src="https://github.com/caseyscarborough/qbittorrent-grafana-dashboard/blob/master/images/logo.png" width=100> <img src="https://github.com/caseyscarborough/qbittorrent-grafana-dashboard/blob/master/images/prometheus.png" width=100>
 
 This app is a Prometheus exporter for the qBittorrent application. You must have version 4.1.0 of qBittorrent or higher
