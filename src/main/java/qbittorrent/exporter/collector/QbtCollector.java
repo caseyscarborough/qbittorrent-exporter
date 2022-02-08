@@ -2,8 +2,6 @@ package qbittorrent.exporter.collector;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.Gauge;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qbittorrent.api.model.Torrent;
 
 import java.util.ArrayList;
@@ -11,7 +9,6 @@ import java.util.List;
 
 public class QbtCollector extends Collector implements QbtMetrics {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(QbtCollector.class);
     private static final String GAUGE_NAME_PREFIX = "qbittorrent_";
 
     // region App Metrics
@@ -227,53 +224,53 @@ public class QbtCollector extends Collector implements QbtMetrics {
     // endregion
 
     private List<Gauge> getMetrics() {
-        List<Gauge> output = new ArrayList<>();
-        output.add(appVersion);
-        output.add(torrentDownloadSpeedBytes);
-        output.add(torrentUploadSpeedBytes);
-        output.add(torrentEta);
-        output.add(torrentProgress);
-        output.add(torrentTimeActive);
-        output.add(torrentStates);
-        output.add(torrentSeeders);
-        output.add(torrentLeechers);
-        output.add(torrentRatio);
-        output.add(torrentAmountLeftBytes);
-        output.add(torrentSizeBytes);
-        output.add(torrentInfo);
-        output.add(torrentSessionDownloadedBytes);
-        output.add(torrentSessionUploadedBytes);
-        output.add(torrentTotalDownloadedBytes);
-        output.add(torrentTotalUploadedBytes);
-        output.add(appMaxActiveDownloads);
-        output.add(appMaxActiveUploads);
-        output.add(appMaxActiveTorrents);
-        output.add(appDownloadRateLimitBytes);
-        output.add(appUploadRateLimitBytes);
-        output.add(appAlternateDownloadRateLimitBytes);
-        output.add(appAlternateUploadRateLimitBytes);
-        output.add(appAlternateRateLimitsEnabled);
-        output.add(globalAlltimeDownloadedBytes);
-        output.add(globalAlltimeUploadedBytes);
-        output.add(globalSessionDownloadedBytes);
-        output.add(globalSessionUploadedBytes);
-        output.add(globalDownloadSpeedBytes);
-        output.add(globalUploadSpeedBytes);
-        output.add(globalRatio);
-        output.add(totalTorrents);
-        return output;
-    }
-
-    @Override
-    public List<MetricFamilySamples> collect() {
-        List<MetricFamilySamples> mfs = new ArrayList<>();
-        for (Gauge gauge : getMetrics()) {
-            mfs.addAll(gauge.collect());
-        }
-        return mfs;
+        return List.of(
+            appVersion,
+            torrentDownloadSpeedBytes,
+            torrentUploadSpeedBytes,
+            torrentEta,
+            torrentProgress,
+            torrentTimeActive,
+            torrentStates,
+            torrentSeeders,
+            torrentLeechers,
+            torrentRatio,
+            torrentAmountLeftBytes,
+            torrentSizeBytes,
+            torrentInfo,
+            torrentSessionDownloadedBytes,
+            torrentSessionUploadedBytes,
+            torrentTotalDownloadedBytes,
+            torrentTotalUploadedBytes,
+            appMaxActiveDownloads,
+            appMaxActiveUploads,
+            appMaxActiveTorrents,
+            appDownloadRateLimitBytes,
+            appUploadRateLimitBytes,
+            appAlternateDownloadRateLimitBytes,
+            appAlternateUploadRateLimitBytes,
+            appAlternateRateLimitsEnabled,
+            globalAlltimeDownloadedBytes,
+            globalAlltimeUploadedBytes,
+            globalSessionDownloadedBytes,
+            globalSessionUploadedBytes,
+            globalDownloadSpeedBytes,
+            globalUploadSpeedBytes,
+            globalRatio,
+            totalTorrents
+        );
     }
 
     // region QbtMetrics methods
+
+    @Override
+    public List<MetricFamilySamples> collect() {
+        List<MetricFamilySamples> samples = new ArrayList<>();
+        for (Gauge gauge : getMetrics()) {
+            samples.addAll(gauge.collect());
+        }
+        return samples;
+    }
 
     @Override
     public void clear() {
