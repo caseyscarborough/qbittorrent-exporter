@@ -10,12 +10,16 @@ import qbittorrent.api.model.Torrent;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ApiClient {
 
@@ -27,10 +31,9 @@ public class ApiClient {
     private boolean loggedIn = false;
     private String authCookie;
 
-    public ApiClient(String host, String port) {
-        this.baseUrl = "http://" + host + ":" + port;
-
-        LOGGER.info("Using qBittorrent url " + baseUrl);
+    public ApiClient(final String baseUrl) {
+        this.baseUrl = baseUrl;
+        LOGGER.info("Using qBittorrent url {}", baseUrl);
         client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .build();
@@ -38,36 +41,48 @@ public class ApiClient {
     }
 
     public void login(String username, String password) {
-        LOGGER.info("Logging in user " + username);
-        final String data = "username=" + username + "&password=" + password;
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(baseUrl + "/api/v2/auth/login?" + data))
-            .header("Referer", baseUrl)
-            .headers("Origin", baseUrl)
+        final String url = baseUrl + "/api/v2/auth/login";
+        LOGGER.info("Logging in user {} using {}", username, url);
+        final String data = Map.of("username", username, "password", password)
+            .entrySet()
+            .stream()
+            .map(e -> e.getKey() + "=" + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
+            .collect(Collectors.joining("&"));
+
+        final HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .POST(HttpRequest.BodyPublishers.ofString(data))
+            .header("Content-Type", "application/x-www-form-urlencoded")
             .build();
 
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
-                throw new ApiException("Could not log in: (" + response.statusCode() + ") " + response.body());
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            final String body = response.body();
+            final int status = response.statusCode();
+            if (status != 200) {
+                LOGGER.warn("Login Error: {}", body);
+                throw new ApiException("Could not log in: (" + status + ") " + body);
             }
 
-            HttpHeaders headers = response.headers();
-            Optional<String> setCookie = headers.firstValue("Set-Cookie");
+            final HttpHeaders headers = response.headers();
+            final Optional<String> setCookie = headers.firstValue("Set-Cookie");
 
             if (setCookie.isEmpty()) {
                 throw new ApiException("Could not get auth cookie from qBittorrent");
             }
 
-            String setCookieValue = setCookie.get();
+            final String setCookieValue = setCookie.get();
             if (!setCookieValue.contains("SID=")) {
                 throw new ApiException("Could not get auth cookie from qBittorrent");
             }
 
             authCookie = setCookie.get().split(";")[0].split("=")[1];
             loggedIn = true;
-        } catch (IOException | InterruptedException e) {
-            throw new ApiException("Could not log in", e);
+        } catch (IOException e) {
+            throw new ApiException("Could not login", e);
+        } catch (InterruptedException e) {
+            LOGGER.error("Thread was interrupted while attempting to log in", e);
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -90,34 +105,35 @@ public class ApiClient {
         });
     }
 
-    private String getRequest(String apiUrl) {
-        LOGGER.info("Making request to " + apiUrl + "...");
-
+    private String getRequest(final String apiUrl) {
+        LOGGER.info("Making request to {}...", apiUrl);
+        final String url = baseUrl + "/api/v2" + apiUrl;
         if (!loggedIn) {
             throw new ApiException("You must log in to retrieve torrents");
         }
 
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(baseUrl + "/api/v2" + apiUrl))
-            .header("Referer", baseUrl)
+        final HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
             .header("Cookie", "SID=" + authCookie)
             .GET()
             .build();
 
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             final int statusCode = response.statusCode();
             LOGGER.info("Response from {} endpoint was {}.", apiUrl, statusCode);
-            if (statusCode == 200) {
-                final String body = response.body();
-                LOGGER.debug("JSON result from {} call: {}", apiUrl, body);
-                return body;
-            } else {
-                throw new ApiException("An error occurred calling " + apiUrl + ": (" + statusCode + ") " + response.body());
+            if (statusCode != 200) {
+                throw new ApiException("An error occurred calling " + url + ": (" + statusCode + ") " + response.body());
             }
-        } catch (IOException | InterruptedException e) {
-            throw new ApiException("Could not get torrent list", e);
+            final String body = response.body();
+            LOGGER.trace("JSON result from {} call: {}", apiUrl, body);
+            return body;
+        } catch (IOException e) {
+            throw new ApiException("Could not make GET request to " + url, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new ApiException("Thread was interrupted while making GET request to " + url, e);
         }
     }
 

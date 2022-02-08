@@ -14,19 +14,18 @@ import qbittorrent.api.model.ServerState;
 import qbittorrent.api.model.Torrent;
 import qbittorrent.exporter.collector.QbtCollector;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class QbtHttpHandler implements HttpHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QbtHttpHandler.class);
+    private static final String CONTENT_TYPE = "text/plain;charset=utf-8";
 
     private final PrometheusMeterRegistry registry;
     private final QbtCollector collector;
     private final ApiClient client;
 
-    public QbtHttpHandler(final ApiClient client) throws IOException {
+    public QbtHttpHandler(final ApiClient client) {
         this.client = client;
         this.registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         this.collector = new QbtCollector();
@@ -34,14 +33,14 @@ public class QbtHttpHandler implements HttpHandler {
     }
 
     @Override
-    public void handleRequest(HttpServerExchange exchange) throws Exception {
+    public void handleRequest(HttpServerExchange exchange) {
         LOGGER.info("Beginning prometheus metrics collection...");
-        long current = System.nanoTime();
+        final long start = System.nanoTime();
         try {
-            List<Torrent> torrents = client.getTorrents();
-            Preferences preferences = client.getPreferences();
-            MainData data = client.getMainData();
-            ServerState serverState = data.getServerState();
+            final List<Torrent> torrents = client.getTorrents();
+            final Preferences preferences = client.getPreferences();
+            final MainData data = client.getMainData();
+            final ServerState serverState = data.getServerState();
             collector.clear();
             collector.setAppVersion(client.getVersion());
             collector.setTotalTorrents(torrents.size());
@@ -79,18 +78,19 @@ public class QbtHttpHandler implements HttpHandler {
                 collector.setTorrentInfo(torrent);
             }
 
-            List<String> states = torrents.stream().map(Torrent::getState).distinct().collect(Collectors.toList());
+            final List<String> states = torrents.stream().map(Torrent::getState).distinct().toList();
             for (String state : states) {
-                long count = torrents.stream().filter(t -> t.getState().equals(state)).count();
+                final long count = torrents.stream().filter(t -> t.getState().equals(state)).count();
                 collector.setTorrentStates(state, count);
             }
 
-            LOGGER.info("Completed in " + (System.nanoTime() - current) / 1_000_000 + "ms");
-            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain;charset=utf-8");
+            final long duration = (System.nanoTime() - start) / 1_000_000;
+            LOGGER.info("Completed in {}ms", duration);
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, CONTENT_TYPE);
             exchange.getResponseSender().send(registry.scrape());
         } catch (Exception e) {
             LOGGER.error("An error occurred calling API", e);
-            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, CONTENT_TYPE);
             exchange.setStatusCode(500);
             exchange.getResponseSender().send("An error occurred. " + e.getMessage());
         }
