@@ -6,4 +6,4 @@ build
 
 .idea/
 *.tar
-build-docker.sh
+build.sh
