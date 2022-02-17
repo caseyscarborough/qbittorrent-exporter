@@ -1,9 +1,11 @@
 package qbittorrent.api;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qbittorrent.api.gson.LongTypeAdapter;
 import qbittorrent.api.model.MainData;
 import qbittorrent.api.model.Preferences;
 import qbittorrent.api.model.Torrent;
@@ -37,7 +39,9 @@ public class ApiClient {
         client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .build();
-        gson = new Gson();
+        gson = new GsonBuilder()
+            .registerTypeAdapter(Long.class, new LongTypeAdapter())
+            .create();
     }
 
     public void login(String username, String password) {

@@ -315,12 +315,12 @@ public class QbtCollector extends Collector implements QbtMetrics {
     }
 
     @Override
-    public void setTorrentSeeders(String name, int value) {
+    public void setTorrentSeeders(String name, long value) {
         torrentSeeders.labels(name).set(value);
     }
 
     @Override
-    public void setTorrentLeechers(String name, int value) {
+    public void setTorrentLeechers(String name, long value) {
         torrentLeechers.labels(name).set(value);
     }
 
@@ -383,7 +383,7 @@ public class QbtCollector extends Collector implements QbtMetrics {
     }
 
     @Override
-    public void setTotalTorrents(int value) {
+    public void setTotalTorrents(long value) {
         totalTorrents.set(value);
     }
 

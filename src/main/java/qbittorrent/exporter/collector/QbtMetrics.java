@@ -35,9 +35,9 @@ public interface QbtMetrics {
 
     void setTorrentStates(String name, long value);
 
-    void setTorrentSeeders(String name, int value);
+    void setTorrentSeeders(String name, long value);
 
-    void setTorrentLeechers(String name, int value);
+    void setTorrentLeechers(String name, long value);
 
     void setTorrentRatio(String name, double value);
 
@@ -69,5 +69,5 @@ public interface QbtMetrics {
 
     void setGlobalRatio(double value);
 
-    void setTotalTorrents(int value);
+    void setTotalTorrents(long value);
 }
