@@ -5,22 +5,22 @@ import com.google.gson.annotations.SerializedName;
 public class ServerState {
 
     @SerializedName("refresh_interval")
-    private int refreshInterval;
+    private long refreshInterval;
 
     @SerializedName("dht_nodes")
-    private int dhtNodes;
+    private long dhtNodes;
 
     @SerializedName("total_peer_connections")
-    private int totalPeerConnections;
+    private long totalPeerConnections;
 
     @SerializedName("average_time_queue")
-    private int averageTimeQueue;
+    private long averageTimeQueue;
 
     @SerializedName("free_space_on_disk")
     private long freeSpaceOnDisk;
 
     @SerializedName("total_queued_size")
-    private int totalQueuedSize;
+    private long totalQueuedSize;
 
     @SerializedName("dl_info_data")
     private long dlInfoData;
@@ -35,7 +35,7 @@ public class ServerState {
     private long alltimeUl;
 
     @SerializedName("up_info_speed")
-    private int upInfoSpeed;
+    private long upInfoSpeed;
 
     @SerializedName("read_cache_overload")
     private String readCacheOverload;
@@ -44,16 +44,16 @@ public class ServerState {
     private String globalRatio;
 
     @SerializedName("dl_rate_limit")
-    private int dlRateLimit;
+    private long dlRateLimit;
 
     @SerializedName("write_cache_overload")
     private String writeCacheOverload;
 
     @SerializedName("queued_io_jobs")
-    private int queuedIoJobs;
+    private long queuedIoJobs;
 
     @SerializedName("total_buffers_size")
-    private int totalBuffersSize;
+    private long totalBuffersSize;
 
     @SerializedName("read_cache_hits")
     private String readCacheHits;
@@ -65,46 +65,46 @@ public class ServerState {
     private long upInfoData;
 
     @SerializedName("total_wasted_session")
-    private int totalWastedSession;
+    private long totalWastedSession;
 
     @SerializedName("up_rate_limit")
-    private int upRateLimit;
+    private long upRateLimit;
 
     @SerializedName("alltime_dl")
     private long alltimeDl;
 
     @SerializedName("dl_info_speed")
-    private int dlInfoSpeed;
+    private long dlInfoSpeed;
 
-    public int getRefreshInterval() {
+    public long getRefreshInterval() {
         return refreshInterval;
     }
 
-    public void setRefreshInterval(int refreshInterval) {
+    public void setRefreshInterval(long refreshInterval) {
         this.refreshInterval = refreshInterval;
     }
 
-    public int getDhtNodes() {
+    public long getDhtNodes() {
         return dhtNodes;
     }
 
-    public void setDhtNodes(int dhtNodes) {
+    public void setDhtNodes(long dhtNodes) {
         this.dhtNodes = dhtNodes;
     }
 
-    public int getTotalPeerConnections() {
+    public long getTotalPeerConnections() {
         return totalPeerConnections;
     }
 
-    public void setTotalPeerConnections(int totalPeerConnections) {
+    public void setTotalPeerConnections(long totalPeerConnections) {
         this.totalPeerConnections = totalPeerConnections;
     }
 
-    public int getAverageTimeQueue() {
+    public long getAverageTimeQueue() {
         return averageTimeQueue;
     }
 
-    public void setAverageTimeQueue(int averageTimeQueue) {
+    public void setAverageTimeQueue(long averageTimeQueue) {
         this.averageTimeQueue = averageTimeQueue;
     }
 
@@ -116,11 +116,11 @@ public class ServerState {
         this.freeSpaceOnDisk = freeSpaceOnDisk;
     }
 
-    public int getTotalQueuedSize() {
+    public long getTotalQueuedSize() {
         return totalQueuedSize;
     }
 
-    public void setTotalQueuedSize(int totalQueuedSize) {
+    public void setTotalQueuedSize(long totalQueuedSize) {
         this.totalQueuedSize = totalQueuedSize;
     }
 
@@ -156,11 +156,11 @@ public class ServerState {
         this.alltimeUl = alltimeUl;
     }
 
-    public int getUpInfoSpeed() {
+    public long getUpInfoSpeed() {
         return upInfoSpeed;
     }
 
-    public void setUpInfoSpeed(int upInfoSpeed) {
+    public void setUpInfoSpeed(long upInfoSpeed) {
         this.upInfoSpeed = upInfoSpeed;
     }
 
@@ -180,11 +180,11 @@ public class ServerState {
         this.globalRatio = globalRatio;
     }
 
-    public int getDlRateLimit() {
+    public long getDlRateLimit() {
         return dlRateLimit;
     }
 
-    public void setDlRateLimit(int dlRateLimit) {
+    public void setDlRateLimit(long dlRateLimit) {
         this.dlRateLimit = dlRateLimit;
     }
 
@@ -196,19 +196,19 @@ public class ServerState {
         this.writeCacheOverload = writeCacheOverload;
     }
 
-    public int getQueuedIoJobs() {
+    public long getQueuedIoJobs() {
         return queuedIoJobs;
     }
 
-    public void setQueuedIoJobs(int queuedIoJobs) {
+    public void setQueuedIoJobs(long queuedIoJobs) {
         this.queuedIoJobs = queuedIoJobs;
     }
 
-    public int getTotalBuffersSize() {
+    public long getTotalBuffersSize() {
         return totalBuffersSize;
     }
 
-    public void setTotalBuffersSize(int totalBuffersSize) {
+    public void setTotalBuffersSize(long totalBuffersSize) {
         this.totalBuffersSize = totalBuffersSize;
     }
 
@@ -236,19 +236,19 @@ public class ServerState {
         this.upInfoData = upInfoData;
     }
 
-    public int getTotalWastedSession() {
+    public long getTotalWastedSession() {
         return totalWastedSession;
     }
 
-    public void setTotalWastedSession(int totalWastedSession) {
+    public void setTotalWastedSession(long totalWastedSession) {
         this.totalWastedSession = totalWastedSession;
     }
 
-    public int getUpRateLimit() {
+    public long getUpRateLimit() {
         return upRateLimit;
     }
 
-    public void setUpRateLimit(int upRateLimit) {
+    public void setUpRateLimit(long upRateLimit) {
         this.upRateLimit = upRateLimit;
     }
 
@@ -260,11 +260,11 @@ public class ServerState {
         this.alltimeDl = alltimeDl;
     }
 
-    public int getDlInfoSpeed() {
+    public long getDlInfoSpeed() {
         return dlInfoSpeed;
     }
 
-    public void setDlInfoSpeed(int dlInfoSpeed) {
+    public void setDlInfoSpeed(long dlInfoSpeed) {
         this.dlInfoSpeed = dlInfoSpeed;
     }
 

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class Preferences {
 
     @SerializedName("embedded_tracker_port")
-    private int embeddedTrackerPort;
+    private long embeddedTrackerPort;
 
     @SerializedName("limit_lan_peers")
     private boolean limitLanPeers;
@@ -26,19 +26,19 @@ public class Preferences {
     private boolean announceToAllTrackers;
 
     @SerializedName("send_buffer_watermark")
-    private int sendBufferWatermark;
+    private long sendBufferWatermark;
 
     @SerializedName("torrent_changed_tmm_enabled")
     private boolean torrentChangedTmmEnabled;
 
     @SerializedName("dl_limit")
-    private int dlLimit;
+    private long dlLimit;
 
     @SerializedName("autorun_program")
     private String autorunProgram;
 
     @SerializedName("async_io_threads")
-    private int asyncIoThreads;
+    private long asyncIoThreads;
 
     @SerializedName("resolve_peer_countries")
     private boolean resolvePeerCountries;
@@ -62,7 +62,7 @@ public class Preferences {
     private boolean incompleteFilesExt;
 
     @SerializedName("send_buffer_low_watermark")
-    private int sendBufferLowWatermark;
+    private long sendBufferLowWatermark;
 
     @SerializedName("preallocate_all")
     private boolean preallocateAll;
@@ -77,7 +77,7 @@ public class Preferences {
     private boolean autorunEnabled;
 
     @SerializedName("scheduler_days")
-    private int schedulerDays;
+    private long schedulerDays;
 
     @SerializedName("limit_tcp_overhead")
     private boolean limitTcpOverhead;
@@ -101,7 +101,7 @@ public class Preferences {
     private boolean anonymousMode;
 
     @SerializedName("rss_max_articles_per_feed")
-    private int rssMaxArticlesPerFeed;
+    private long rssMaxArticlesPerFeed;
 
     @SerializedName("ip_filter_enabled")
     private boolean ipFilterEnabled;
@@ -119,7 +119,7 @@ public class Preferences {
     private String bannedIPs;
 
     @SerializedName("schedule_to_hour")
-    private int scheduleToHour;
+    private long scheduleToHour;
 
     @SerializedName("rss_processing_enabled")
     private boolean rssProcessingEnabled;
@@ -131,7 +131,7 @@ public class Preferences {
     private boolean savePathChangedTmmEnabled;
 
     @SerializedName("encryption")
-    private int encryption;
+    private long encryption;
 
     @SerializedName("proxy_auth_enabled")
     private boolean proxyAuthEnabled;
@@ -143,7 +143,7 @@ public class Preferences {
     private boolean webUiCsrfProtectionEnabled;
 
     @SerializedName("max_ratio_act")
-    private int maxRatioAct;
+    private long maxRatioAct;
 
     @SerializedName("mail_notification_email")
     private String mailNotificationEmail;
@@ -155,7 +155,7 @@ public class Preferences {
     private String webUiAddress;
 
     @SerializedName("max_connec")
-    private int maxConnec;
+    private long maxConnec;
 
     @SerializedName("announce_ip")
     private String announceIp;
@@ -170,7 +170,7 @@ public class Preferences {
     private boolean dht;
 
     @SerializedName("send_buffer_watermark_factor")
-    private int sendBufferWatermarkFactor;
+    private long sendBufferWatermarkFactor;
 
     @SerializedName("web_ui_username")
     private String webUiUsername;
@@ -179,10 +179,10 @@ public class Preferences {
     private String currentInterfaceAddress;
 
     @SerializedName("slow_torrent_dl_rate_threshold")
-    private int slowTorrentDlRateThreshold;
+    private long slowTorrentDlRateThreshold;
 
     @SerializedName("max_seeding_time")
-    private int maxSeedingTime;
+    private long maxSeedingTime;
 
     @SerializedName("web_ui_host_header_validation_enabled")
     private boolean webUiHostHeaderValidationEnabled;
@@ -191,37 +191,37 @@ public class Preferences {
     private boolean dontCountSlowTorrents;
 
     @SerializedName("schedule_from_hour")
-    private int scheduleFromHour;
+    private long scheduleFromHour;
 
     @SerializedName("use_https")
     private boolean useHttps;
 
     @SerializedName("proxy_type")
-    private int proxyType;
+    private long proxyType;
 
     @SerializedName("disk_cache")
-    private int diskCache;
+    private long diskCache;
 
     @SerializedName("max_ratio")
-    private int maxRatio;
+    private long maxRatio;
 
     @SerializedName("rss_refresh_interval")
-    private int rssRefreshInterval;
+    private long rssRefreshInterval;
 
     @SerializedName("web_ui_port")
-    private int webUiPort;
+    private long webUiPort;
 
     @SerializedName("upload_slots_behavior")
-    private int uploadSlotsBehavior;
+    private long uploadSlotsBehavior;
 
     @SerializedName("limit_utp_rate")
     private boolean limitUtpRate;
 
     @SerializedName("bittorrent_protocol")
-    private int bittorrentProtocol;
+    private long bittorrentProtocol;
 
     @SerializedName("disk_cache_ttl")
-    private int diskCacheTtl;
+    private long diskCacheTtl;
 
     @SerializedName("dyndns_password")
     private String dyndnsPassword;
@@ -230,7 +230,7 @@ public class Preferences {
     private boolean bypassLocalAuth;
 
     @SerializedName("upload_choking_algorithm")
-    private int uploadChokingAlgorithm;
+    private long uploadChokingAlgorithm;
 
     @SerializedName("enable_os_cache")
     private boolean enableOsCache;
@@ -239,7 +239,7 @@ public class Preferences {
     private boolean ipFilterTrackers;
 
     @SerializedName("schedule_from_min")
-    private int scheduleFromMin;
+    private long scheduleFromMin;
 
     @SerializedName("queueing_enabled")
     private boolean queueingEnabled;
@@ -251,22 +251,22 @@ public class Preferences {
     private boolean maxSeedingTimeEnabled;
 
     @SerializedName("max_uploads_per_torrent")
-    private int maxUploadsPerTorrent;
+    private long maxUploadsPerTorrent;
 
     @SerializedName("socket_backlog_size")
-    private int socketBacklogSize;
+    private long socketBacklogSize;
 
     @SerializedName("web_ui_upnp")
     private boolean webUiUpnp;
 
     @SerializedName("proxy_port")
-    private int proxyPort;
+    private long proxyPort;
 
     @SerializedName("bypass_auth_subnet_whitelist")
     private String bypassAuthSubnetWhitelist;
 
     @SerializedName("listen_port")
-    private int listenPort;
+    private long listenPort;
 
     @SerializedName("mail_notification_sender")
     private String mailNotificationSender;
@@ -278,31 +278,31 @@ public class Preferences {
     private boolean createSubfolderEnabled;
 
     @SerializedName("alt_up_limit")
-    private int altUpLimit;
+    private long altUpLimit;
 
     @SerializedName("max_active_downloads")
-    private int maxActiveDownloads;
+    private long maxActiveDownloads;
 
     @SerializedName("slow_torrent_inactive_timer")
-    private int slowTorrentInactiveTimer;
+    private long slowTorrentInactiveTimer;
 
     @SerializedName("max_active_uploads")
-    private int maxActiveUploads;
+    private long maxActiveUploads;
 
     @SerializedName("lsd")
     private boolean lsd;
 
     @SerializedName("utp_tcp_mixed_mode")
-    private int utpTcpMixedMode;
+    private long utpTcpMixedMode;
 
     @SerializedName("auto_delete_mode")
-    private int autoDeleteMode;
+    private long autoDeleteMode;
 
     @SerializedName("outgoing_ports_min")
-    private int outgoingPortsMin;
+    private long outgoingPortsMin;
 
     @SerializedName("slow_torrent_ul_rate_threshold")
-    private int slowTorrentUlRateThreshold;
+    private long slowTorrentUlRateThreshold;
 
     @SerializedName("web_ui_https_key_path")
     private String webUiHttpsKeyPath;
@@ -320,10 +320,10 @@ public class Preferences {
     private boolean alternativeWebuiEnabled;
 
     @SerializedName("max_connec_per_torrent")
-    private int maxConnecPerTorrent;
+    private long maxConnecPerTorrent;
 
     @SerializedName("alt_dl_limit")
-    private int altDlLimit;
+    private long altDlLimit;
 
     @SerializedName("recheck_completed_torrents")
     private boolean recheckCompletedTorrents;
@@ -335,13 +335,13 @@ public class Preferences {
     private String mailNotificationPassword;
 
     @SerializedName("save_resume_data_interval")
-    private int saveResumeDataInterval;
+    private long saveResumeDataInterval;
 
     @SerializedName("schedule_to_min")
-    private int scheduleToMin;
+    private long scheduleToMin;
 
     @SerializedName("dyndns_service")
-    private int dyndnsService;
+    private long dyndnsService;
 
     @SerializedName("dyndns_domain")
     private String dyndnsDomain;
@@ -356,7 +356,7 @@ public class Preferences {
     private boolean announceToAllTiers;
 
     @SerializedName("max_uploads")
-    private int maxUploads;
+    private long maxUploads;
 
     @SerializedName("enable_embedded_tracker")
     private boolean enableEmbeddedTracker;
@@ -365,10 +365,10 @@ public class Preferences {
     private boolean mailNotificationEnabled;
 
     @SerializedName("web_ui_session_timeout")
-    private int webUiSessionTimeout;
+    private long webUiSessionTimeout;
 
     @SerializedName("file_pool_size")
-    private int filePoolSize;
+    private long filePoolSize;
 
     @SerializedName("start_paused_enabled")
     private boolean startPausedEnabled;
@@ -377,13 +377,13 @@ public class Preferences {
     private boolean addTrackersEnabled;
 
     @SerializedName("checking_memory_use")
-    private int checkingMemoryUse;
+    private long checkingMemoryUse;
 
     @SerializedName("mail_notification_auth_enabled")
     private boolean mailNotificationAuthEnabled;
 
     @SerializedName("up_limit")
-    private int upLimit;
+    private long upLimit;
 
     @SerializedName("scheduler_enabled")
     private boolean schedulerEnabled;
@@ -392,10 +392,10 @@ public class Preferences {
     private boolean autoTmmEnabled;
 
     @SerializedName("outgoing_ports_max")
-    private int outgoingPortsMax;
+    private long outgoingPortsMax;
 
     @SerializedName("max_active_torrents")
-    private int maxActiveTorrents;
+    private long maxActiveTorrents;
 
     @SerializedName("mail_notification_username")
     private String mailNotificationUsername;
@@ -403,11 +403,11 @@ public class Preferences {
     @SerializedName("export_dir")
     private String exportDir;
 
-    public int getEmbeddedTrackerPort() {
+    public long getEmbeddedTrackerPort() {
         return embeddedTrackerPort;
     }
 
-    public void setEmbeddedTrackerPort(int embeddedTrackerPort) {
+    public void setEmbeddedTrackerPort(long embeddedTrackerPort) {
         this.embeddedTrackerPort = embeddedTrackerPort;
     }
 
@@ -459,11 +459,11 @@ public class Preferences {
         this.announceToAllTrackers = announceToAllTrackers;
     }
 
-    public int getSendBufferWatermark() {
+    public long getSendBufferWatermark() {
         return sendBufferWatermark;
     }
 
-    public void setSendBufferWatermark(int sendBufferWatermark) {
+    public void setSendBufferWatermark(long sendBufferWatermark) {
         this.sendBufferWatermark = sendBufferWatermark;
     }
 
@@ -475,11 +475,11 @@ public class Preferences {
         this.torrentChangedTmmEnabled = torrentChangedTmmEnabled;
     }
 
-    public int getDlLimit() {
+    public long getDlLimit() {
         return dlLimit;
     }
 
-    public void setDlLimit(int dlLimit) {
+    public void setDlLimit(long dlLimit) {
         this.dlLimit = dlLimit;
     }
 
@@ -491,11 +491,11 @@ public class Preferences {
         this.autorunProgram = autorunProgram;
     }
 
-    public int getAsyncIoThreads() {
+    public long getAsyncIoThreads() {
         return asyncIoThreads;
     }
 
-    public void setAsyncIoThreads(int asyncIoThreads) {
+    public void setAsyncIoThreads(long asyncIoThreads) {
         this.asyncIoThreads = asyncIoThreads;
     }
 
@@ -555,11 +555,11 @@ public class Preferences {
         this.incompleteFilesExt = incompleteFilesExt;
     }
 
-    public int getSendBufferLowWatermark() {
+    public long getSendBufferLowWatermark() {
         return sendBufferLowWatermark;
     }
 
-    public void setSendBufferLowWatermark(int sendBufferLowWatermark) {
+    public void setSendBufferLowWatermark(long sendBufferLowWatermark) {
         this.sendBufferLowWatermark = sendBufferLowWatermark;
     }
 
@@ -595,11 +595,11 @@ public class Preferences {
         this.autorunEnabled = autorunEnabled;
     }
 
-    public int getSchedulerDays() {
+    public long getSchedulerDays() {
         return schedulerDays;
     }
 
-    public void setSchedulerDays(int schedulerDays) {
+    public void setSchedulerDays(long schedulerDays) {
         this.schedulerDays = schedulerDays;
     }
 
@@ -659,11 +659,11 @@ public class Preferences {
         this.anonymousMode = anonymousMode;
     }
 
-    public int getRssMaxArticlesPerFeed() {
+    public long getRssMaxArticlesPerFeed() {
         return rssMaxArticlesPerFeed;
     }
 
-    public void setRssMaxArticlesPerFeed(int rssMaxArticlesPerFeed) {
+    public void setRssMaxArticlesPerFeed(long rssMaxArticlesPerFeed) {
         this.rssMaxArticlesPerFeed = rssMaxArticlesPerFeed;
     }
 
@@ -707,11 +707,11 @@ public class Preferences {
         this.bannedIPs = bannedIPs;
     }
 
-    public int getScheduleToHour() {
+    public long getScheduleToHour() {
         return scheduleToHour;
     }
 
-    public void setScheduleToHour(int scheduleToHour) {
+    public void setScheduleToHour(long scheduleToHour) {
         this.scheduleToHour = scheduleToHour;
     }
 
@@ -739,11 +739,11 @@ public class Preferences {
         this.savePathChangedTmmEnabled = savePathChangedTmmEnabled;
     }
 
-    public int getEncryption() {
+    public long getEncryption() {
         return encryption;
     }
 
-    public void setEncryption(int encryption) {
+    public void setEncryption(long encryption) {
         this.encryption = encryption;
     }
 
@@ -771,11 +771,11 @@ public class Preferences {
         this.webUiCsrfProtectionEnabled = webUiCsrfProtectionEnabled;
     }
 
-    public int getMaxRatioAct() {
+    public long getMaxRatioAct() {
         return maxRatioAct;
     }
 
-    public void setMaxRatioAct(int maxRatioAct) {
+    public void setMaxRatioAct(long maxRatioAct) {
         this.maxRatioAct = maxRatioAct;
     }
 
@@ -803,11 +803,11 @@ public class Preferences {
         this.webUiAddress = webUiAddress;
     }
 
-    public int getMaxConnec() {
+    public long getMaxConnec() {
         return maxConnec;
     }
 
-    public void setMaxConnec(int maxConnec) {
+    public void setMaxConnec(long maxConnec) {
         this.maxConnec = maxConnec;
     }
 
@@ -843,11 +843,11 @@ public class Preferences {
         this.dht = dht;
     }
 
-    public int getSendBufferWatermarkFactor() {
+    public long getSendBufferWatermarkFactor() {
         return sendBufferWatermarkFactor;
     }
 
-    public void setSendBufferWatermarkFactor(int sendBufferWatermarkFactor) {
+    public void setSendBufferWatermarkFactor(long sendBufferWatermarkFactor) {
         this.sendBufferWatermarkFactor = sendBufferWatermarkFactor;
     }
 
@@ -867,19 +867,19 @@ public class Preferences {
         this.currentInterfaceAddress = currentInterfaceAddress;
     }
 
-    public int getSlowTorrentDlRateThreshold() {
+    public long getSlowTorrentDlRateThreshold() {
         return slowTorrentDlRateThreshold;
     }
 
-    public void setSlowTorrentDlRateThreshold(int slowTorrentDlRateThreshold) {
+    public void setSlowTorrentDlRateThreshold(long slowTorrentDlRateThreshold) {
         this.slowTorrentDlRateThreshold = slowTorrentDlRateThreshold;
     }
 
-    public int getMaxSeedingTime() {
+    public long getMaxSeedingTime() {
         return maxSeedingTime;
     }
 
-    public void setMaxSeedingTime(int maxSeedingTime) {
+    public void setMaxSeedingTime(long maxSeedingTime) {
         this.maxSeedingTime = maxSeedingTime;
     }
 
@@ -899,11 +899,11 @@ public class Preferences {
         this.dontCountSlowTorrents = dontCountSlowTorrents;
     }
 
-    public int getScheduleFromHour() {
+    public long getScheduleFromHour() {
         return scheduleFromHour;
     }
 
-    public void setScheduleFromHour(int scheduleFromHour) {
+    public void setScheduleFromHour(long scheduleFromHour) {
         this.scheduleFromHour = scheduleFromHour;
     }
 
@@ -915,51 +915,51 @@ public class Preferences {
         this.useHttps = useHttps;
     }
 
-    public int getProxyType() {
+    public long getProxyType() {
         return proxyType;
     }
 
-    public void setProxyType(int proxyType) {
+    public void setProxyType(long proxyType) {
         this.proxyType = proxyType;
     }
 
-    public int getDiskCache() {
+    public long getDiskCache() {
         return diskCache;
     }
 
-    public void setDiskCache(int diskCache) {
+    public void setDiskCache(long diskCache) {
         this.diskCache = diskCache;
     }
 
-    public int getMaxRatio() {
+    public long getMaxRatio() {
         return maxRatio;
     }
 
-    public void setMaxRatio(int maxRatio) {
+    public void setMaxRatio(long maxRatio) {
         this.maxRatio = maxRatio;
     }
 
-    public int getRssRefreshInterval() {
+    public long getRssRefreshInterval() {
         return rssRefreshInterval;
     }
 
-    public void setRssRefreshInterval(int rssRefreshInterval) {
+    public void setRssRefreshInterval(long rssRefreshInterval) {
         this.rssRefreshInterval = rssRefreshInterval;
     }
 
-    public int getWebUiPort() {
+    public long getWebUiPort() {
         return webUiPort;
     }
 
-    public void setWebUiPort(int webUiPort) {
+    public void setWebUiPort(long webUiPort) {
         this.webUiPort = webUiPort;
     }
 
-    public int getUploadSlotsBehavior() {
+    public long getUploadSlotsBehavior() {
         return uploadSlotsBehavior;
     }
 
-    public void setUploadSlotsBehavior(int uploadSlotsBehavior) {
+    public void setUploadSlotsBehavior(long uploadSlotsBehavior) {
         this.uploadSlotsBehavior = uploadSlotsBehavior;
     }
 
@@ -971,19 +971,19 @@ public class Preferences {
         this.limitUtpRate = limitUtpRate;
     }
 
-    public int getBittorrentProtocol() {
+    public long getBittorrentProtocol() {
         return bittorrentProtocol;
     }
 
-    public void setBittorrentProtocol(int bittorrentProtocol) {
+    public void setBittorrentProtocol(long bittorrentProtocol) {
         this.bittorrentProtocol = bittorrentProtocol;
     }
 
-    public int getDiskCacheTtl() {
+    public long getDiskCacheTtl() {
         return diskCacheTtl;
     }
 
-    public void setDiskCacheTtl(int diskCacheTtl) {
+    public void setDiskCacheTtl(long diskCacheTtl) {
         this.diskCacheTtl = diskCacheTtl;
     }
 
@@ -1003,11 +1003,11 @@ public class Preferences {
         this.bypassLocalAuth = bypassLocalAuth;
     }
 
-    public int getUploadChokingAlgorithm() {
+    public long getUploadChokingAlgorithm() {
         return uploadChokingAlgorithm;
     }
 
-    public void setUploadChokingAlgorithm(int uploadChokingAlgorithm) {
+    public void setUploadChokingAlgorithm(long uploadChokingAlgorithm) {
         this.uploadChokingAlgorithm = uploadChokingAlgorithm;
     }
 
@@ -1027,11 +1027,11 @@ public class Preferences {
         this.ipFilterTrackers = ipFilterTrackers;
     }
 
-    public int getScheduleFromMin() {
+    public long getScheduleFromMin() {
         return scheduleFromMin;
     }
 
-    public void setScheduleFromMin(int scheduleFromMin) {
+    public void setScheduleFromMin(long scheduleFromMin) {
         this.scheduleFromMin = scheduleFromMin;
     }
 
@@ -1059,19 +1059,19 @@ public class Preferences {
         this.maxSeedingTimeEnabled = maxSeedingTimeEnabled;
     }
 
-    public int getMaxUploadsPerTorrent() {
+    public long getMaxUploadsPerTorrent() {
         return maxUploadsPerTorrent;
     }
 
-    public void setMaxUploadsPerTorrent(int maxUploadsPerTorrent) {
+    public void setMaxUploadsPerTorrent(long maxUploadsPerTorrent) {
         this.maxUploadsPerTorrent = maxUploadsPerTorrent;
     }
 
-    public int getSocketBacklogSize() {
+    public long getSocketBacklogSize() {
         return socketBacklogSize;
     }
 
-    public void setSocketBacklogSize(int socketBacklogSize) {
+    public void setSocketBacklogSize(long socketBacklogSize) {
         this.socketBacklogSize = socketBacklogSize;
     }
 
@@ -1083,11 +1083,11 @@ public class Preferences {
         this.webUiUpnp = webUiUpnp;
     }
 
-    public int getProxyPort() {
+    public long getProxyPort() {
         return proxyPort;
     }
 
-    public void setProxyPort(int proxyPort) {
+    public void setProxyPort(long proxyPort) {
         this.proxyPort = proxyPort;
     }
 
@@ -1099,11 +1099,11 @@ public class Preferences {
         this.bypassAuthSubnetWhitelist = bypassAuthSubnetWhitelist;
     }
 
-    public int getListenPort() {
+    public long getListenPort() {
         return listenPort;
     }
 
-    public void setListenPort(int listenPort) {
+    public void setListenPort(long listenPort) {
         this.listenPort = listenPort;
     }
 
@@ -1131,35 +1131,35 @@ public class Preferences {
         this.createSubfolderEnabled = createSubfolderEnabled;
     }
 
-    public int getAltUpLimit() {
+    public long getAltUpLimit() {
         return altUpLimit;
     }
 
-    public void setAltUpLimit(int altUpLimit) {
+    public void setAltUpLimit(long altUpLimit) {
         this.altUpLimit = altUpLimit;
     }
 
-    public int getMaxActiveDownloads() {
+    public long getMaxActiveDownloads() {
         return maxActiveDownloads;
     }
 
-    public void setMaxActiveDownloads(int maxActiveDownloads) {
+    public void setMaxActiveDownloads(long maxActiveDownloads) {
         this.maxActiveDownloads = maxActiveDownloads;
     }
 
-    public int getSlowTorrentInactiveTimer() {
+    public long getSlowTorrentInactiveTimer() {
         return slowTorrentInactiveTimer;
     }
 
-    public void setSlowTorrentInactiveTimer(int slowTorrentInactiveTimer) {
+    public void setSlowTorrentInactiveTimer(long slowTorrentInactiveTimer) {
         this.slowTorrentInactiveTimer = slowTorrentInactiveTimer;
     }
 
-    public int getMaxActiveUploads() {
+    public long getMaxActiveUploads() {
         return maxActiveUploads;
     }
 
-    public void setMaxActiveUploads(int maxActiveUploads) {
+    public void setMaxActiveUploads(long maxActiveUploads) {
         this.maxActiveUploads = maxActiveUploads;
     }
 
@@ -1171,35 +1171,35 @@ public class Preferences {
         this.lsd = lsd;
     }
 
-    public int getUtpTcpMixedMode() {
+    public long getUtpTcpMixedMode() {
         return utpTcpMixedMode;
     }
 
-    public void setUtpTcpMixedMode(int utpTcpMixedMode) {
+    public void setUtpTcpMixedMode(long utpTcpMixedMode) {
         this.utpTcpMixedMode = utpTcpMixedMode;
     }
 
-    public int getAutoDeleteMode() {
+    public long getAutoDeleteMode() {
         return autoDeleteMode;
     }
 
-    public void setAutoDeleteMode(int autoDeleteMode) {
+    public void setAutoDeleteMode(long autoDeleteMode) {
         this.autoDeleteMode = autoDeleteMode;
     }
 
-    public int getOutgoingPortsMin() {
+    public long getOutgoingPortsMin() {
         return outgoingPortsMin;
     }
 
-    public void setOutgoingPortsMin(int outgoingPortsMin) {
+    public void setOutgoingPortsMin(long outgoingPortsMin) {
         this.outgoingPortsMin = outgoingPortsMin;
     }
 
-    public int getSlowTorrentUlRateThreshold() {
+    public long getSlowTorrentUlRateThreshold() {
         return slowTorrentUlRateThreshold;
     }
 
-    public void setSlowTorrentUlRateThreshold(int slowTorrentUlRateThreshold) {
+    public void setSlowTorrentUlRateThreshold(long slowTorrentUlRateThreshold) {
         this.slowTorrentUlRateThreshold = slowTorrentUlRateThreshold;
     }
 
@@ -1243,19 +1243,19 @@ public class Preferences {
         this.alternativeWebuiEnabled = alternativeWebuiEnabled;
     }
 
-    public int getMaxConnecPerTorrent() {
+    public long getMaxConnecPerTorrent() {
         return maxConnecPerTorrent;
     }
 
-    public void setMaxConnecPerTorrent(int maxConnecPerTorrent) {
+    public void setMaxConnecPerTorrent(long maxConnecPerTorrent) {
         this.maxConnecPerTorrent = maxConnecPerTorrent;
     }
 
-    public int getAltDlLimit() {
+    public long getAltDlLimit() {
         return altDlLimit;
     }
 
-    public void setAltDlLimit(int altDlLimit) {
+    public void setAltDlLimit(long altDlLimit) {
         this.altDlLimit = altDlLimit;
     }
 
@@ -1283,27 +1283,27 @@ public class Preferences {
         this.mailNotificationPassword = mailNotificationPassword;
     }
 
-    public int getSaveResumeDataInterval() {
+    public long getSaveResumeDataInterval() {
         return saveResumeDataInterval;
     }
 
-    public void setSaveResumeDataInterval(int saveResumeDataInterval) {
+    public void setSaveResumeDataInterval(long saveResumeDataInterval) {
         this.saveResumeDataInterval = saveResumeDataInterval;
     }
 
-    public int getScheduleToMin() {
+    public long getScheduleToMin() {
         return scheduleToMin;
     }
 
-    public void setScheduleToMin(int scheduleToMin) {
+    public void setScheduleToMin(long scheduleToMin) {
         this.scheduleToMin = scheduleToMin;
     }
 
-    public int getDyndnsService() {
+    public long getDyndnsService() {
         return dyndnsService;
     }
 
-    public void setDyndnsService(int dyndnsService) {
+    public void setDyndnsService(long dyndnsService) {
         this.dyndnsService = dyndnsService;
     }
 
@@ -1339,11 +1339,11 @@ public class Preferences {
         this.announceToAllTiers = announceToAllTiers;
     }
 
-    public int getMaxUploads() {
+    public long getMaxUploads() {
         return maxUploads;
     }
 
-    public void setMaxUploads(int maxUploads) {
+    public void setMaxUploads(long maxUploads) {
         this.maxUploads = maxUploads;
     }
 
@@ -1363,19 +1363,19 @@ public class Preferences {
         this.mailNotificationEnabled = mailNotificationEnabled;
     }
 
-    public int getWebUiSessionTimeout() {
+    public long getWebUiSessionTimeout() {
         return webUiSessionTimeout;
     }
 
-    public void setWebUiSessionTimeout(int webUiSessionTimeout) {
+    public void setWebUiSessionTimeout(long webUiSessionTimeout) {
         this.webUiSessionTimeout = webUiSessionTimeout;
     }
 
-    public int getFilePoolSize() {
+    public long getFilePoolSize() {
         return filePoolSize;
     }
 
-    public void setFilePoolSize(int filePoolSize) {
+    public void setFilePoolSize(long filePoolSize) {
         this.filePoolSize = filePoolSize;
     }
 
@@ -1395,11 +1395,11 @@ public class Preferences {
         this.addTrackersEnabled = addTrackersEnabled;
     }
 
-    public int getCheckingMemoryUse() {
+    public long getCheckingMemoryUse() {
         return checkingMemoryUse;
     }
 
-    public void setCheckingMemoryUse(int checkingMemoryUse) {
+    public void setCheckingMemoryUse(long checkingMemoryUse) {
         this.checkingMemoryUse = checkingMemoryUse;
     }
 
@@ -1411,11 +1411,11 @@ public class Preferences {
         this.mailNotificationAuthEnabled = mailNotificationAuthEnabled;
     }
 
-    public int getUpLimit() {
+    public long getUpLimit() {
         return upLimit;
     }
 
-    public void setUpLimit(int upLimit) {
+    public void setUpLimit(long upLimit) {
         this.upLimit = upLimit;
     }
 
@@ -1435,19 +1435,19 @@ public class Preferences {
         this.autoTmmEnabled = autoTmmEnabled;
     }
 
-    public int getOutgoingPortsMax() {
+    public long getOutgoingPortsMax() {
         return outgoingPortsMax;
     }
 
-    public void setOutgoingPortsMax(int outgoingPortsMax) {
+    public void setOutgoingPortsMax(long outgoingPortsMax) {
         this.outgoingPortsMax = outgoingPortsMax;
     }
 
-    public int getMaxActiveTorrents() {
+    public long getMaxActiveTorrents() {
         return maxActiveTorrents;
     }
 
-    public void setMaxActiveTorrents(int maxActiveTorrents) {
+    public void setMaxActiveTorrents(long maxActiveTorrents) {
         this.maxActiveTorrents = maxActiveTorrents;
     }
 
