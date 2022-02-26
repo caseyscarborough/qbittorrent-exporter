@@ -30,10 +30,11 @@ public class ApiClient {
     private final String baseUrl;
     private final HttpClient client;
     private final Gson gson;
-    private boolean loggedIn = false;
+    private final String username;
+    private final String password;
     private String authCookie;
 
-    public ApiClient(final String baseUrl) {
+    public ApiClient(final String baseUrl, final String username, final String password) {
         this.baseUrl = baseUrl;
         LOGGER.info("Using qBittorrent url {}", baseUrl);
         client = HttpClient.newBuilder()
@@ -42,6 +43,8 @@ public class ApiClient {
         gson = new GsonBuilder()
             .registerTypeAdapter(Long.class, new LongTypeAdapter())
             .create();
+        this.username = username;
+        this.password = password;
     }
 
     public void login(String username, String password) {
@@ -81,9 +84,10 @@ public class ApiClient {
             }
 
             authCookie = setCookie.get().split(";")[0].split("=")[1];
-            loggedIn = true;
+            final String version = getVersion();
+            LOGGER.info("Successfully logged in with qBittorrent version {}.", version);
         } catch (IOException e) {
-            throw new ApiException("Could not login", e);
+            throw new ApiException("Could not make request to the qBittorrent API. Is qBittorrent up?", e);
         } catch (InterruptedException e) {
             LOGGER.error("Thread was interrupted while attempting to log in", e);
             Thread.currentThread().interrupt();
@@ -110,12 +114,16 @@ public class ApiClient {
     }
 
     private String getRequest(final String apiUrl) {
-        LOGGER.info("Making request to {}...", apiUrl);
-        final String url = baseUrl + "/api/v2" + apiUrl;
-        if (!loggedIn) {
-            throw new ApiException("You must log in to retrieve torrents");
+        return getRequest(apiUrl, 1);
+    }
+
+    private String getRequest(final String apiUrl, int retries) {
+        if (authCookie == null) {
+            LOGGER.info("Authorization cookie has not been set, we need to login first.");
+            login(username, password);
         }
 
+        final String url = baseUrl + "/api/v2" + apiUrl;
         final HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .header("Cookie", "SID=" + authCookie)
@@ -127,14 +135,21 @@ public class ApiClient {
 
             final int statusCode = response.statusCode();
             LOGGER.info("Response from {} endpoint was {}.", apiUrl, statusCode);
-            if (statusCode != 200) {
+            if (statusCode == 403 && retries != 0) {
+                // If status code is 403, this means qBittorrent was restarted as
+                // the session token is invalidated on each restart.
+                // In this case, we'll invalidate the auth cookie, and retry the request.
+                LOGGER.warn("The current auth cookie was invalid. Invalidating session and retrying the request...");
+                authCookie = null;
+                return getRequest(apiUrl, retries - 1);
+            } else if (statusCode != 200) {
                 throw new ApiException("An error occurred calling " + url + ": (" + statusCode + ") " + response.body());
             }
             final String body = response.body();
             LOGGER.trace("JSON result from {} call: {}", apiUrl, body);
             return body;
         } catch (IOException e) {
-            throw new ApiException("Could not make GET request to " + url, e);
+            throw new ApiException("Could not make request to the qBittorrent API. Is qBittorrent up?", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new ApiException("Thread was interrupted while making GET request to " + url, e);

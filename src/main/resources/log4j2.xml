@@ -9,7 +9,7 @@
         <Root level="warn">
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="qbittorrent.exporter" level="debug" additivity="false">
+        <Logger name="qbittorrent" level="debug" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
     </Loggers>
