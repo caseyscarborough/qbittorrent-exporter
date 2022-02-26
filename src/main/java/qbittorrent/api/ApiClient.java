@@ -84,6 +84,8 @@ public class ApiClient {
             }
 
             authCookie = setCookie.get().split(";")[0].split("=")[1];
+            final String version = getVersion();
+            LOGGER.info("Successfully logged in with qBittorrent version {}.", version);
         } catch (IOException e) {
             throw new ApiException("Could not make request to the qBittorrent API. Is qBittorrent up?", e);
         } catch (InterruptedException e) {
@@ -112,10 +114,13 @@ public class ApiClient {
     }
 
     private String getRequest(final String apiUrl) {
+        return getRequest(apiUrl, 1);
+    }
+
+    private String getRequest(final String apiUrl, int retries) {
         if (authCookie == null) {
-            LOGGER.info("Making the initial request to qBittorrent API, need to log in first.");
-            this.login(username, password);
-            LOGGER.info("Your qBittorrent version is {}.", this.getVersion());
+            LOGGER.info("Authorization cookie has not been set, we need to login first.");
+            login(username, password);
         }
 
         final String url = baseUrl + "/api/v2" + apiUrl;
@@ -130,7 +135,14 @@ public class ApiClient {
 
             final int statusCode = response.statusCode();
             LOGGER.info("Response from {} endpoint was {}.", apiUrl, statusCode);
-            if (statusCode != 200) {
+            if (statusCode == 403 && retries != 0) {
+                // If status code is 403, this means qBittorrent was restarted as
+                // the session token is invalidated on each restart.
+                // In this case, we'll invalidate the auth cookie, and retry the request.
+                LOGGER.warn("The current auth cookie was invalid. Invalidating session and retrying the request...");
+                authCookie = null;
+                return getRequest(apiUrl, retries - 1);
+            } else if (statusCode != 200) {
                 throw new ApiException("An error occurred calling " + url + ": (" + statusCode + ") " + response.body());
             }
             final String body = response.body();
