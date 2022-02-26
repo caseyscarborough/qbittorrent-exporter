@@ -35,9 +35,7 @@ public class Application {
         final String protocol = getEnvironment(PROTOCOL_ENVIRONMENT, PROTOCOL_DEFAULT);
         final String baseUrl = getEnvironment(BASE_URL_ENVIRONMENT, String.format("%s://%s:%s", protocol, host, port));
 
-        final ApiClient client = new ApiClient(baseUrl);
-        client.login(username, password);
-        LOGGER.info("Your qBittorrent version is {}.", client.getVersion());
+        final ApiClient client = new ApiClient(baseUrl, username, password);
         try {
             final QbtHttpHandler handler = new QbtHttpHandler(client);
             final Undertow server = Undertow.builder()
