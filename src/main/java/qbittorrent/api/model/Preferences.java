@@ -203,7 +203,7 @@ public class Preferences {
     private long diskCache;
 
     @SerializedName("max_ratio")
-    private long maxRatio;
+    private double maxRatio;
 
     @SerializedName("rss_refresh_interval")
     private long rssRefreshInterval;
@@ -931,11 +931,11 @@ public class Preferences {
         this.diskCache = diskCache;
     }
 
-    public long getMaxRatio() {
+    public double getMaxRatio() {
         return maxRatio;
     }
 
-    public void setMaxRatio(long maxRatio) {
+    public void setMaxRatio(double maxRatio) {
         this.maxRatio = maxRatio;
     }
 
