@@ -41,6 +41,7 @@ public class ApiClient {
             .version(HttpClient.Version.HTTP_1_1)
             .build();
         gson = new GsonBuilder()
+            .registerTypeAdapter(long.class, new LongTypeAdapter())
             .registerTypeAdapter(Long.class, new LongTypeAdapter())
             .create();
         this.username = username;
