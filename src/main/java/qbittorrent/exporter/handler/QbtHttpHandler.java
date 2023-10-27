@@ -2,9 +2,7 @@ package qbittorrent.exporter.handler;
 
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
-import io.undertow.server.HttpHandler;
-import io.undertow.server.HttpServerExchange;
-import io.undertow.util.Headers;
+import io.vertx.core.http.HttpServerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qbittorrent.api.ApiClient;
@@ -14,26 +12,30 @@ import qbittorrent.api.model.ServerState;
 import qbittorrent.api.model.Torrent;
 import qbittorrent.exporter.collector.QbtCollector;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class QbtHttpHandler implements HttpHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QbtHttpHandler.class);
     private static final String CONTENT_TYPE = "text/plain;charset=utf-8";
-
+    public static final String CONTENT_TYPE_HDR_NAME = "Content-Type";
     private final PrometheusMeterRegistry registry;
     private final QbtCollector collector;
     private final ApiClient client;
+    private final Locale locale;
 
-    public QbtHttpHandler(final ApiClient client) {
+    public QbtHttpHandler(final ApiClient client, final String locale) {
         this.client = client;
         this.registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         this.collector = new QbtCollector();
         this.registry.getPrometheusRegistry().register(collector);
+        this.locale = Locale.forLanguageTag(locale);
     }
 
     @Override
-    public void handleRequest(HttpServerExchange exchange) {
+    public void handleRequest(HttpServerResponse serverResponse) {
         LOGGER.info("Beginning prometheus metrics collection...");
         final long start = System.nanoTime();
         try {
@@ -50,7 +52,7 @@ public class QbtHttpHandler implements HttpHandler {
             collector.setGlobalSessionUploadedBytes(serverState.getUpInfoData());
             collector.setGlobalDownloadSpeedBytes(serverState.getDlInfoSpeed());
             collector.setGlobalUploadSpeedBytes(serverState.getUpInfoSpeed());
-            collector.setGlobalRatio(Double.parseDouble(serverState.getGlobalRatio()));
+            collector.setGlobalRatio(NumberFormat.getInstance(locale).parse(serverState.getGlobalRatio()).doubleValue());
             collector.setAppDownloadRateLimitBytes(serverState.getDlRateLimit());
             collector.setAppUploadRateLimitBytes(serverState.getUpRateLimit());
             collector.setAppAlternateDownloadRateLimitBytes(preferences.getAltDlLimit());
@@ -86,13 +88,13 @@ public class QbtHttpHandler implements HttpHandler {
 
             final long duration = (System.nanoTime() - start) / 1_000_000;
             LOGGER.info("Completed in {}ms", duration);
-            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, CONTENT_TYPE);
-            exchange.getResponseSender().send(registry.scrape());
+            serverResponse.putHeader(CONTENT_TYPE_HDR_NAME, CONTENT_TYPE);
+            serverResponse.send(registry.scrape());
         } catch (Exception e) {
             LOGGER.error("An error occurred calling API", e);
-            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, CONTENT_TYPE);
-            exchange.setStatusCode(500);
-            exchange.getResponseSender().send("An error occurred. " + e.getMessage());
+            serverResponse.putHeader(CONTENT_TYPE_HDR_NAME, CONTENT_TYPE);
+            serverResponse.setStatusCode(500);
+            serverResponse.send("An error occurred. " + e.getMessage());
         }
     }
 }
