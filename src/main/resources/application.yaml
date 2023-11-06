@@ -6,8 +6,9 @@ quarkus:
     path: ${METRICS_PATH:/metrics}
   native:
     additional-build-args:
-      -march=compatibility,\
-      -H:+UnlockExperimentalVMOptions,-H:+IncludeAllLocales,-H:-UnlockExperimentalVMOptions
+      -march=compatibility
+  locales:
+    ar,ca,cs,de,en,es,fr,it,ja,mt,nl,pl,pt,pt_BR,ru,sk,uk,zh_CN,zh_HK,zh_TW
 
 qbittorrent:
   exporter:
