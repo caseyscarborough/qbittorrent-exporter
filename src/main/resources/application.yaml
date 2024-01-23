@@ -1,0 +1,21 @@
+quarkus:
+  http:
+    host: ${METRICS_HOST:0.0.0.0}
+    port: ${METRICS_PORT:17871}
+  resteasy-reactive:
+    path: ${METRICS_PATH:/metrics}
+  native:
+    additional-build-args:
+      -march=compatibility
+  locales:
+    all
+
+qbittorrent:
+  exporter:
+    username: ${QBITTORRENT_USERNAME:admin}
+    password: ${QBITTORRENT_PASSWORD:adminadmin}
+    host: ${QBITTORRENT_HOST:localhost}
+    port: ${QBITTORRENT_PORT:8080}
+    protocol: ${QBITTORRENT_PROTOCOL:http}
+    baseUrl: ${QBITTORRENT_BASE_URL:${qbittorrent.exporter.protocol}://${qbittorrent.exporter.host}:${qbittorrent.exporter.port}}
+    locale: ${QBITTORRENT_LOCALE:en-US}
