@@ -8,7 +8,7 @@ quarkus:
     additional-build-args:
       -march=compatibility
   locales:
-    ar,ca,cs,de,en,es,fr,it,ja,mt,nl,pl,pt,pt_BR,ru,sk,uk,zh_CN,zh_HK,zh_TW
+    all
 
 qbittorrent:
   exporter:
