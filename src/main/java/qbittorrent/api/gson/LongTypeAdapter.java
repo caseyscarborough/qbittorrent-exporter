@@ -28,7 +28,7 @@ public class LongTypeAdapter extends TypeAdapter<Long> {
         try {
             return Long.valueOf(value);
         } catch (NumberFormatException e) {
-            LOGGER.warn("Could not read long {} which had an invalid long value. Defaulting value to 0.", value);
+            LOGGER.debug("Could not read long {} which had an invalid long value. Defaulting value to 0.", value);
             return 0L;
         }
     }
